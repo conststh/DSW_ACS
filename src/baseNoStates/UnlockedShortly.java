@@ -20,4 +20,8 @@ public class UnlockedShortly extends DoorState{
     public void unlockShortly(){
         //Desbloquear con tiempo
     }
+
+    public UnlockedShortly(Door door){
+        //Constructor Unlocked Shortly
+    }
 }

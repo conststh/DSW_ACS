@@ -12,7 +12,7 @@ public class Door {
   public Door(String id) {
     this.id = id;
     closed = true;
-    state = new Unlocked();
+    state = new Unlocked(this);
   }
 
   public void processRequest(RequestReader request) {
