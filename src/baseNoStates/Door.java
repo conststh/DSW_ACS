@@ -7,10 +7,12 @@ import org.json.JSONObject;
 public class Door {
   private final String id;
   private boolean closed; // physically
+    private DoorState state;
 
   public Door(String id) {
     this.id = id;
     closed = true;
+    state = new Unlocked();
   }
 
   public void processRequest(RequestReader request) {
@@ -28,11 +30,12 @@ public class Door {
   private void doAction(String action) {
     switch (action) {
       case Actions.OPEN:
-        if (closed) {
-          closed = false;
-        } else {
-          System.out.println("Can't open door " + id + " because it's already open");
-        }
+          if (closed) {
+              closed = false;
+          }else {
+              System.out.println("Can't open door " + id + " because it's already open");
+          }
+
         break;
       case Actions.CLOSE:
         if (closed) {
