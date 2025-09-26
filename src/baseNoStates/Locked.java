@@ -1,27 +1,29 @@
 package baseNoStates;
 
+import java.security.cert.Extension;
+
 public class Locked extends DoorState{
     public void close(){
-        //Cerrar
+        System.out.println("Door " + door.getId() + " is already locked.")
     }
 
     public void open(){
-        //Abrir
+        System.out.println("Door " + door.getId() + " is locked.")
     }
 
     public void lock(){
-        //Bloquear
+        System.out.println("Door " + door.getId() + " is already locked")
     }
 
     public void unlock(){
-        //Desbloquear
+        door.unlock(); //implementar
     }
 
     public void unlockShortly(){
-        //Desbloquear con tiempo
+        door.unlockShortly(); //implementar
     }
 
     public Locked(Door door){
-        //Constructor locked
+        this.door = door;
     }
 }

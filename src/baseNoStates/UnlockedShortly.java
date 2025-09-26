@@ -22,6 +22,6 @@ public class UnlockedShortly extends DoorState{
     }
 
     public UnlockedShortly(Door door){
-        //Constructor Unlocked Shortly
+        this.door = Door
     }
 }

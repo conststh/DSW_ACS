@@ -2,26 +2,36 @@ package baseNoStates;
 
 public class Unlocked extends DoorState{
     public void close(){
-        //Cerrar
+        if(door.isClosed()){
+            System.out.println("Door "+ door.getId() + " is already closed");
+        }
+        else{
+            door.close();
+        }
     }
 
     public void open(){
-        //Abrir
+        if(!door.isClosed()){
+            System.out.println("Door " + door.getId() + " is already open");
+        }
+        else{
+            door.open();
+        }
     }
 
     public void lock(){
-        //Bloquear
+        door.lock(); //Implementar
     }
 
     public void unlock(){
-        //Desbloquear
+        System.out.println("Door "+door.getId() + " is already unlocked");
     }
 
     public void unlockShortly(){
-        //Desbloquear con tiempo
+        door.unlockShortly();
     }
 
     public Unlocked(Door door){
-        //Constructor unlocked
+        this.door = door;
     }
 }
