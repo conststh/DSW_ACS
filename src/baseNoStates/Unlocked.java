@@ -1,27 +1,70 @@
 package baseNoStates;
 
 public class Unlocked extends DoorState{
-    public void close(){
-        door.close();
-    }
 
-    public void open(){
-        door.open();
-    }
+  public Unlocked(Door door) {
+    super(door);
+  }
 
-    public void lock(){
-        door.lock(); //Implementar
+  @Override
+  public void open() {
+    if (door.isClosed())
+    {
+      door.setClosed(false);
+      System.out.println("The door " + door.getId() + " is now open.");
     }
+    else
+    {
+      System.out.println("Can't open the door " + door.getId() + ", is already open.");
+    }
+  }
 
-    public void unlock(){
-        System.out.println("Door "+door.getId() + " is already unlocked");
+  @Override
+  public void close() {
+    if (door.isClosed())
+    {
+      System.out.println("Can't close the door " + door.getId() + ", is already closed.");
     }
+    else
+    {
+      door.setClosed(true);
+      System.out.println("The door " + door.getId() + " is now closed.");
+    }
+  }
 
-    public void unlockShortly(){
-        door.unlockShortly(); //Se puede abrir temporalmente si esta totalmente abierta?
+  @Override
+  public void lock() {
+    if (door.getStateName().equals("locked")) {
+      System.out.println("Can't lock the door " + door.getId() + ", is already locked.");
     }
+    else if (door.isClosed())
+    {
+      door.setState();
+      System.out.println("The door " + door.getId()  + " is now locked.");
+    }
+    else{
+      System.out.println("Can't lock the door " + door.getId() + ", is open.");
+    }
+  }
 
-    public Unlocked(Door door){
-        super(door);
+  @Override
+  public void unlock() {
+    System.out.println("Can't unlock the door " + door.getId() + ", is already unlocked.");
+    /*if (door.getStateName().equals("unlocked"))
+    {
+      System.out.println("Can't unlock the door " + door.getId() + ", is already unlocked.");
     }
+    else if (door.isClosed())
+    {
+      door.setState(new Unlocked(door));
+      System.out.println("The door " + door.getId()  + " is now unlocked.");
+    }
+    else{
+      System.out.println("Can't unlock the door " + door.getId() + ", is open.");
+    }*/
+  }
+
+  @Override
+  public void unlockShortly(){
+    System.out.println("Can't unlock the door " + door.getId() + ", is already unlocked.");
 }

@@ -1,13 +1,17 @@
 package baseNoStates;
 
 public abstract class DoorState {
-    public abstract void open();
-    public abstract void close();
-    public abstract void lock();
-    public abstract void unlock();
-    public abstract void unlockShortly();
+  protected Door door;
 
-    public DoorState(Door door){ this.door = door; } //Imagino que esto va asi
+  protected DoorState(Door door){
+    this.door = door;
+  }
 
-    protected Door door;
+  public abstract void open();
+  public abstract void close();
+  public abstract void lock();
+  public abstract void unlock();
+  public abstract void unlockShortly();
+
+
 }
