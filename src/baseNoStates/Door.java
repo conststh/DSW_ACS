@@ -28,9 +28,9 @@ public class Door {
   }
 
   private void doAction(String action) {
-    switch (action) {
+    switch (action) { //Cambiar cosas para que dependa de getStateName
       case Actions.OPEN:
-          if (closed) {
+          if (closed) { //Implementar estados?
               closed = false;
           }else {
               System.out.println("Can't open door " + id + " because it's already open");
@@ -38,21 +38,28 @@ public class Door {
 
         break;
       case Actions.CLOSE:
-        if (closed) {
+        if (closed) { //Implementar estados?
           System.out.println("Can't close door " + id + " because it's already closed");
         } else {
           closed = true;
         }
         break;
       case Actions.LOCK:
-        // TODO
-        // fall through
+          if (!closed){
+              System.out.println("Can't lock door " + id + " because it's open.");
+          }
+          else{
+              state = new Locked(this);
+              break;
+          }
       case Actions.UNLOCK:
         // TODO
-        // fall through
+        state = new Unlocked(this);
+        break;
       case Actions.UNLOCK_SHORTLY:
         // TODO
-        System.out.println("Action " + action + " not implemented yet");
+        state = new UnlockedShortly(this);
+        //añadir sleep de 10s? esperar cambio de estado? idk
         break;
       default:
         assert false : "Unknown action " + action;
@@ -69,6 +76,7 @@ public class Door {
   }
 
   public String getStateName() {
+      //Implementar?
     return "unlocked";
   }
 

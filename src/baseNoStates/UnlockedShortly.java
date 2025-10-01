@@ -2,11 +2,11 @@ package baseNoStates;
 
 public class UnlockedShortly extends DoorState{
     public void close(){
-        //Cerrar
+        door.close();
     }
 
     public void open(){
-        //Abrir
+        door.open()
     }
 
     public void lock(){
@@ -14,7 +14,7 @@ public class UnlockedShortly extends DoorState{
     }
 
     public void unlock(){
-        //Desbloquear
+        door.unlock()
     }
 
     public void unlockShortly(){
@@ -22,6 +22,6 @@ public class UnlockedShortly extends DoorState{
     }
 
     public UnlockedShortly(Door door){
-        this.door = Door
+        super(door);
     }
 }

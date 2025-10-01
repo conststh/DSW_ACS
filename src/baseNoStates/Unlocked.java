@@ -2,21 +2,11 @@ package baseNoStates;
 
 public class Unlocked extends DoorState{
     public void close(){
-        if(door.isClosed()){
-            System.out.println("Door "+ door.getId() + " is already closed");
-        }
-        else{
-            door.close();
-        }
+        door.close();
     }
 
     public void open(){
-        if(!door.isClosed()){
-            System.out.println("Door " + door.getId() + " is already open");
-        }
-        else{
-            door.open();
-        }
+        door.open();
     }
 
     public void lock(){
@@ -28,10 +18,10 @@ public class Unlocked extends DoorState{
     }
 
     public void unlockShortly(){
-        door.unlockShortly();
+        door.unlockShortly(); //Se puede abrir temporalmente si esta totalmente abierta?
     }
 
     public Unlocked(Door door){
-        this.door = door;
+        super(door);
     }
 }
