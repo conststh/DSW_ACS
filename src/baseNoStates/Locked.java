@@ -3,27 +3,37 @@ package baseNoStates;
 import java.security.cert.Extension;
 
 public class Locked extends DoorState{
-    public void close(){
-        System.out.println("Door " + door.getId() + " is already closed.");
-    }
+  public Locked(Door door){
+    super(door);
+  }
 
-    public void open(){
-        System.out.println("Can't open door " + door.getId() + " is locked.");
-    }
+  @Override
+  public String getStateName() {
+    return "locked";
+  }
 
-    public void lock(){
-        System.out.println("Door " + door.getId() + " is already locked");
-    }
+  @Override
+  public void close(){
+      System.out.println("Door " + door.getId() + " is already closed.");
+  }
 
-    public void unlock(){
-        door.unlock(); //TODO
-    }
+  @Override
+  public void open(){
+      System.out.println("Can't open door " + door.getId() + " is locked.");
+  }
 
-    public void unlockShortly(){
-        door.unlockShortly(); //TODO
-    }
+  @Override
+  public void lock(){
+      System.out.println("Door " + door.getId() + " is already locked");
+  }
 
-    public Locked(Door door){
-      super(door);
-    }
+  @Override
+  public void unlock(){
+      door.unlock(); //TODO
+  }
+
+  @Override
+  public void unlockShortly(){
+      door.unlockShortly(); //TODO
+  }
 }

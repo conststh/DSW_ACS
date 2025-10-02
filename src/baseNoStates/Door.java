@@ -7,12 +7,33 @@ import org.json.JSONObject;
 public class Door {
   private final String id;
   private boolean closed; // physically
-    private DoorState state;
+  private DoorState state;
 
   public Door(String id) {
     this.id = id;
     closed = true;
     state = new Unlocked(this);
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public String getStateName() {
+    //TODO, Need to repass
+    return state.getState();
+  }
+
+  public void setState(DoorState state) {
+    this.state = state;
+  }
+
+  public boolean isClosed() {
+    return closed;
+  }
+
+  public void setClosed(boolean closed) {
+    this.closed = closed;
   }
 
   public void processRequest(RequestReader request) {
@@ -65,19 +86,6 @@ public class Door {
         assert false : "Unknown action " + action;
         System.exit(-1);
     }
-  }
-
-  public boolean isClosed() {
-    return closed;
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public String getStateName() {
-      //TODO
-    return "unlocked";
   }
 
   @Override

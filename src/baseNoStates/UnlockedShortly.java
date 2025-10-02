@@ -1,32 +1,40 @@
 package baseNoStates;
 
 public class UnlockedShortly extends DoorState{
-    public void close(){
-      //TODO
-      door.close();
-    }
+  public UnlockedShortly(Door door){
+    //TODO
+  }
 
-    public void open(){
-      //TODO
-        door.open()
-    }
+  @Override
+  public String getStateName() {
+    return "unlockedShortly";
+  }
 
-    public void lock(){
-      //TODO
-        //Bloquear
-    }
+  @Override
+  public void close(){
+    //TODO
+    door.close();
+  }
 
-    public void unlock(){
-      //TODO
-      door.unlock()
-    }
+  @Override
+  public void open(){
+    //TODO
+  }
 
-    public void unlockShortly(){
-      //TODO
-        //Desbloquear con tiempo
-    }
+  @Override
+  public void lock(){
+    //TODO
+      //Bloquear
+  }
 
-    public UnlockedShortly(Door door){
-      //TODO
-    }
+  @Override
+  public void unlock(){
+    //TODO
+  }
+
+  @Override
+  public void unlockShortly(){
+    //TODO
+      //Desbloquear con tiempo
+  }
 }
