@@ -34,22 +34,23 @@ public class Unlocked extends DoorState{
 
   @Override
   public void lock() {
-    if (door.getStateName().equals("locked")) {
-      System.out.println("Can't lock the door " + door.getId() + ", is already locked.");
+    /* if (door.getStateName().equals("locked")) {
+      System.out.println("Can't lock the door " + door.getId() + ", it is already locked.");
     }
-    else if (door.isClosed())
+    else */
+      if (door.isClosed())
     {
       door.setState(); //TODO
       System.out.println("The door " + door.getId()  + " is now locked.");
     }
     else{
-      System.out.println("Can't lock the door " + door.getId() + ", is open.");
+      System.out.println("Can't lock the door " + door.getId() + ", it is open.");
     }
   }
 
   @Override
   public void unlock() {
-    System.out.println("Can't unlock the door " + door.getId() + ", is already unlocked.");
+    System.out.println("Can't unlock the door " + door.getId() + ", it is already unlocked.");
     /*if (door.getStateName().equals("unlocked"))
     {
       System.out.println("Can't unlock the door " + door.getId() + ", is already unlocked.");

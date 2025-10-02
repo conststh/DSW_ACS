@@ -2,21 +2,16 @@ package baseNoStates;
 
 import java.security.cert.Extension;
 
-//No entiendo lo de las acciones.
-
 public class Locked extends DoorState{
     public void close(){
-      //TODO
-        System.out.println("Door " + door.getId() + " is locked.");
+        System.out.println("Door " + door.getId() + " is already closed.");
     }
 
     public void open(){
-      //TODO
-        System.out.println("Door " + door.getId() + " is locked.");
+        System.out.println("Can't open door " + door.getId() + " is locked.");
     }
 
     public void lock(){
-      //TODO
         System.out.println("Door " + door.getId() + " is already locked");
     }
 
@@ -29,7 +24,6 @@ public class Locked extends DoorState{
     }
 
     public Locked(Door door){
-      //TODO
-
+      super(door);
     }
 }
