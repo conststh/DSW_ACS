@@ -76,7 +76,7 @@ public class Door {
   }
 
   public String getStateName() {
-      //Implementar?
+      //TODO
     return "unlocked";
   }
 

@@ -39,7 +39,7 @@ public class Unlocked extends DoorState{
     }
     else if (door.isClosed())
     {
-      door.setState();
+      door.setState(); //TODO
       System.out.println("The door " + door.getId()  + " is now locked.");
     }
     else{
