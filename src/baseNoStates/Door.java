@@ -21,7 +21,7 @@ public class Door {
 
   public String getStateName() {
     //TODO, Need to repass
-    return state.getState();
+    return state.getStateName();
   }
 
   public void setState(DoorState state) {
