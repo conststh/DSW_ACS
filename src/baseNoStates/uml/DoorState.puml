@@ -27,6 +27,7 @@ abstract class DoorState {
 {abstract} + lock()
 {abstract} + unlock()
 {abstract} + unlockShortly()
+{abstract} + propped()
 }
 
 class Locked {
@@ -37,6 +38,7 @@ class Locked {
 + lock()
 + unlock()
 + unlockShortly()
++ propped()
 }
 
 class Unlocked {
@@ -47,6 +49,7 @@ class Unlocked {
 + lock()
 + unlock()
 + unlockShortly()
++ propped()
 }
 
 class UnlockedShortly {
@@ -57,6 +60,18 @@ class UnlockedShortly {
 + lock()
 + unlock()
 + unlockShortly()
++ propped()
+}
+
+class Propped {
++ Propped(door: Door)
++ getStateName() : String
++ open()
++ close()
++ lock()
++ unlock()
++ unlockShortly()
++ propped()
 }
 
 '---RELATIONS---
@@ -65,6 +80,7 @@ Door "1" o- "1" DoorState : "state"
 DoorState <|-- Locked
 DoorState <|-- Unlocked
 DoorState <|-- UnlockedShortly
+DoorState <|-- Propped
 '------------
 
 @enduml
