@@ -1,7 +1,7 @@
 package baseNoStates;
 
 public class DirectoryAreas {
-  public static Area getAreaById(string id){
+  public static Area getAreaById(String id){
     return root.findAreaById(id);
   }
   public ArrayList<Door> getDoorsGivingAccess(Area area){
