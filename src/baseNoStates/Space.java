@@ -1,10 +1,10 @@
 package baseNoStates;
 import java.util.ArrayList;
 
-public class Partition extends Area{
-  private final ArrayList<Area> children = new ArrayList<>();
+public class Space extends Area{
+  private final ArrayList<Door> doors = new ArrayList<>();
 
-  public Partition(String id) {
+  public Space(String id) {
     super(id);
   }
 
@@ -23,7 +23,9 @@ public class Partition extends Area{
     //TODO
   }
 
-  public void add(Area area) {
-    children.add(area);
+  public void addDoor(Door door) {
+    if (!doors.contains(door)) {
+      doors.add(door);
+    }
   }
 }

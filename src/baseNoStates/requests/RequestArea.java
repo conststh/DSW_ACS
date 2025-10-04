@@ -64,13 +64,13 @@ public class RequestArea implements Request {
   // them to all of its doors. For some it may be authorized and action will be done, for others
   // it won't be authorized and nothing will happen to them.
   public void process() {
-    // commented out until Area, Space and Partition are implemented
+    // commented out until Area, baseNoStates.Space and Partition are implemented
 
     /*
     // make the door requests and put them into the area request to be authorized later and
     // processed later
     Area area = DirectoryAreas.findAreaById(areaId);
-    // an Area is a Space or a Partition
+    // an Area is a baseNoStates.Space or a Partition
     if (area != null) {
       // is null when from the app we click on an action but no place is selected because
       // there (flutter) I don't control like I do in javascript that all the parameters are provided

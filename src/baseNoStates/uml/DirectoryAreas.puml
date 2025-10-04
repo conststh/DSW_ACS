@@ -1,0 +1,93 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class DirectoryAreas{
+{static} -rootArea : Area
+{static} -allDoors : Door[]
+---
+{static} -makeAreas()
+{static} +findAreaById(id : String) : Area
+{static} +findDoorById(id : String) : Door
+{static} +getAllDoors() : Door[]
+}
+
+abstract class Area {
+#id : String
+---
++Area(id : String)
++getId() : String
+{abstract} +getSpaces() : Space[]
+{abstract} +getDoorsGivingAccess() : Door[]
+{abstract} +findAreaById(id : String) : Area
+}
+
+class Partition {
+-children : Area[]
+---
++Partition(id : String)
++getSpaces() : Space[]
++getDoorsGivingAccess() : Door[]
++findAreaById(id : String) : Area
++add(area: Area)
+
+}
+
+class Space {
+-doors : Door[]
+---
++Space(id : String)
++getSpaces() : Space[]
++getDoorsGivingAccess() : Door[]
++findAreaById(id : String) : Area
++addDoor(door: Door)
+}
+
+class User {
+- name : String
+- credential : String
+---
++User(name: String, credential: String)
+-getSpaces() : Space[]
++canBeInSpace(sp : Space) : boolean
++ toString() : String
+}
+
+class DirectoryDoors {
+- {static} allDoors : Door[]
+---
++ {static} makeDoors()
++ {static} findDoorById(id : String) : Door
++ {static} getAllDoors() : Door[]
+}
+
+class Door {
+- id : String
+- closed : boolean
+---
++ Door(id : String)
++ getId() : String
++ getStateName() : String
++ setState(doorState : DoorState)
++ isClosed() : boolean
++ setClosed()
++ processRequest(request : RequestReader)
+- doAction(action : String)
++ toString() : String
++ toJson() : JSONObject
+}
+
+
+'---RELATIONS---
+Area "*" <--* "1" User : "areas"
+Area "1" <-o  "1" DirectoryAreas  : "rootArea"
+Space "1" <- Door : "toSpace"
+Space "1" <- Door : "fromSpace"
+Door "*" <- Space : "doors"
+Door "*" <-- DirectoryDoors : "allDoors"
+Area "*" <--o "1" Partition : children
+
+Area <|-- Partition
+Area <|-- Space
+'------------
+
+@enduml
