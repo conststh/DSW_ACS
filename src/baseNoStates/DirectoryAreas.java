@@ -1,13 +1,19 @@
 package baseNoStates;
 
 public class DirectoryAreas {
+  private Area rootArea;
+  private arrayList<Door> allDoors;
+
+  private void makeArea(){
+    //TODO
+  }
   public static Area getAreaById(String id){
     return root.findAreaById(id);
   }
   public ArrayList<Door> getDoorsGivingAccess(Area area){
-    //List of doors that give access to some space of this area
+    //TODO
   }
   public ArrayList<Space> getSpaces(Area area){
-    //List of spaces of this area, for the user to get all the spaces they can be, so as to authorize a request
+    //TODO
   }
 }

@@ -15,7 +15,7 @@ public class Space extends Area{
 
   @Override
   public ArrayList<Door> getDoorsGivingAccess() {
-    //TODO
+    return doors;
   }
 
   @Override
