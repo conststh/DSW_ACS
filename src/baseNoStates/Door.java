@@ -12,16 +12,20 @@ public class Door {
   private final String id;
   private boolean closed; // Represents the physical state of the door (true if closed, false if open)
   private DoorState state; // The current state of the door (e.g., Locked, Unlocked)
+  private Space fromSpace;
+  private Space toSpace;
 
   /**
    * Constructs a new Door with a given ID.
    * By default, a new door is physically closed and in the 'Unlocked' state.
    * @param id The unique identifier for the door.
    */
-  public Door(String id) {
+  public Door(String id, Space from, Space to) {
     this.id = id;
-    closed = true;
-    state = new Unlocked(this);
+    this.closed = true;
+    this.state = new Unlocked(this);
+    this.fromSpace = from;
+    this.toSpace = to;
   }
 
   /**
@@ -55,6 +59,14 @@ public class Door {
    */
   public boolean isClosed() {
     return closed;
+  }
+
+  public Space getFromSpace() {
+    return fromSpace;
+  }
+
+  public Space getToSpace() {
+    return toSpace;
   }
 
   /**

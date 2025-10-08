@@ -1,5 +1,6 @@
 package baseNoStates;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Partition extends Area{
   private final ArrayList<Area> children = new ArrayList<>();

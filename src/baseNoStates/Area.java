@@ -1,5 +1,6 @@
 package baseNoStates;
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Area {
   protected final String id;
