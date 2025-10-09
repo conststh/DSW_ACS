@@ -1,5 +1,7 @@
 package baseNoStates;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Space extends Area{
   private final ArrayList<Door> doors = new ArrayList<>();
@@ -10,7 +12,9 @@ public class Space extends Area{
 
   @Override
   public ArrayList<Space> getSpaces() {
-    //TODO
+    // Un Space es una hoja en la jerarquía, por lo que la lista de espacios que contiene
+    // es simplemente una lista que se contiene a sí mismo.
+    return new ArrayList<>(List.of(this));
   }
 
   @Override
@@ -20,7 +24,11 @@ public class Space extends Area{
 
   @Override
   public Area findAreaById(String id) {
-    //TODO
+    if (this.getId().equals(id)) {
+      return this;
+    }
+    System.out.println("Can't find area by his ID ");
+    return null; // No se encontró y no hay más áreas hijas que explorar
   }
 
   public void addDoor(Door door) {

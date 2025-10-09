@@ -3,7 +3,7 @@ skinparam linetype ortho
 skinparam packageStyle rect
 skinparam classAttributeIconSize 0
 
-title Access Control System - UML Class Diagram
+title Access Control System - UML Diagram (Updated)
 
 package "Server" {
   class Main {
@@ -29,17 +29,17 @@ package "Server" {
 package "Managers (Singletons)" {
   class DirectoryUsers <<Singleton>> {
     -users: User[]
+    -userGroups: UserGroup[]
     +getInstance(): DirectoryUsers
     +findUserByCredential(credential: String): User
     +makeUsers()
+    +makeUserGroups()
   }
 
   class DirectoryAreas <<Singleton>> {
     -rootArea: Area
     +getInstance(): DirectoryAreas
     +findAreaById(id: String): Area
-    +getAllDoors(): Door[]
-    +makeAreas()
   }
 }
 
@@ -55,49 +55,30 @@ package "Requests" {
     -now: LocalDateTime
     -doorId: String
     -authorized: boolean
-    -reasons: String[]
-  }
-
-  class RequestArea implements Request {
-    -credential: String
-    -action: String
-    -now: LocalDateTime
-    -areaId: String
-    -requestsReader: RequestReader[]
-  }
-
-  class RequestRefresh implements Request {
-    -jsonDoors: JSONObject[]
   }
 }
 
 SocketThread ..> Request : <<creates>>
-RequestArea "1" *-- "many" RequestReader : <<creates>>
 Request ..> DirectoryUsers : <<uses>>
 Request ..> DirectoryAreas : <<uses>>
 
 package "Domain Model" {
 
-  package "Building Structure (Composite Pattern)" {
+  package "Building Structure (Composite)" {
     abstract class Area {
       #id: String
-      +findAreaById(id: String): Area
-      +getDoorsGivingAccess(): Door[]
-      +getSpaces(): Space[]
     }
-
     class Partition extends Area {
       -children: Area[*]
     }
-
-    class Space extends Area {
-    }
+    class Space extends Area {}
 
     class Door {
       -id: String
       -closed: boolean
-      +processRequest(request: RequestReader)
+      +processRequest(req: RequestReader)
       +setState(state: DoorState)
+      +update(obs: Observable, arg: Object)
     }
 
     Partition "1" o-- "*" Area : contains
@@ -106,8 +87,9 @@ package "Domain Model" {
     Door "1" -- "1" Space : "to"
   }
 
-  package "Door State (State Pattern)" {
+  package "Door State (State)" {
     interface DoorState {
+      #name: String
       +open(door: Door)
       +close(door: Door)
       +lock(door: Door)
@@ -127,19 +109,18 @@ package "Domain Model" {
     class User {
       -name: String
       -credential: String
+      +canSendRequests(now: LocalDateTime): boolean
+      +canBeInSpace(space: Space): boolean
+      +canDoAction(action: String): boolean
     }
 
     class UserGroup {
       -name: String
+      -allowedActions: String[]
       +isAuthorized(action: String, area: Area, datetime: LocalDateTime): boolean
     }
 
     class Schedule {
-      -startDate: LocalDate
-      -endDate: LocalDate
-      -days: DayOfWeek[]
-      -startTime: LocalTime
-      -endTime: LocalTime
       +isInSchedule(datetime: LocalDateTime): boolean
     }
 
@@ -148,15 +129,15 @@ package "Domain Model" {
     UserGroup "many" -- "*" Area : has permissions for
   }
 
-  package "Timing (Observer Pattern)" {
-    class Clock <<Observable>> {
-        - timer: Timer
+  package "Timing (Observer)" {
+    class Clock <<Singleton, Observable>> {
+        - timer: java.util.Timer
+        +getInstance(): Clock
         +addObserver(o: Observer)
     }
     Door ..> java.util.Observer : <<implements>>
-    Clock "1" -- "*" Door : notifies
   }
-
+  Clock "1" --> "*" Door : notifies
   UnlockedShortly ..> Clock : <<uses>>
 }
 

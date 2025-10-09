@@ -10,6 +10,7 @@ class Door {
 + getStateName() : String
 + setState(doorState : DoorState)
 + isClosed() : boolean
++ getFrom() :
 + setClosed()
 + processRequest(request : RequestReader)
 - doAction(action : String)
