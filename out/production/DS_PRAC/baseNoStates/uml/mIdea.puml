@@ -1,0 +1,163 @@
+@startuml
+skinparam linetype ortho
+skinparam packageStyle rect
+skinparam classAttributeIconSize 0
+
+title Access Control System - UML Class Diagram
+
+package "Server" {
+  class Main {
+    +main(args: String[])
+  }
+
+  class Webserver {
+    -PORT: int
+    +Webserver()
+    +run()
+  }
+
+  class SocketThread <<inner class of Webserver>> {
+    +run()
+    -makeRequest(tokens: String[]): Request
+    -makeJsonAnswer(request: Request): String
+  }
+
+  Main -right-> Webserver : creates >
+  Webserver +-- SocketThread
+}
+
+package "Managers (Singletons)" {
+  class DirectoryUsers <<Singleton>> {
+    -users: User[]
+    +getInstance(): DirectoryUsers
+    +findUserByCredential(credential: String): User
+    +makeUsers()
+  }
+
+  class DirectoryAreas <<Singleton>> {
+    -rootArea: Area
+    +getInstance(): DirectoryAreas
+    +findAreaById(id: String): Area
+    +getAllDoors(): Door[]
+    +makeAreas()
+  }
+}
+
+package "Requests" {
+  interface Request {
+    +process()
+    +answerToJson(): JSONObject
+  }
+
+  class RequestReader implements Request {
+    -credential: String
+    -action: String
+    -now: LocalDateTime
+    -doorId: String
+    -authorized: boolean
+    -reasons: String[]
+  }
+
+  class RequestArea implements Request {
+    -credential: String
+    -action: String
+    -now: LocalDateTime
+    -areaId: String
+    -requestsReader: RequestReader[]
+  }
+
+  class RequestRefresh implements Request {
+    -jsonDoors: JSONObject[]
+  }
+}
+
+SocketThread ..> Request : <<creates>>
+RequestArea "1" *-- "many" RequestReader : <<creates>>
+Request ..> DirectoryUsers : <<uses>>
+Request ..> DirectoryAreas : <<uses>>
+
+package "Domain Model" {
+
+  package "Building Structure (Composite Pattern)" {
+    abstract class Area {
+      #id: String
+      +findAreaById(id: String): Area
+      +getDoorsGivingAccess(): Door[]
+      +getSpaces(): Space[]
+    }
+
+    class Partition extends Area {
+      -children: Area[*]
+    }
+
+    class Space extends Area {
+    }
+
+    class Door {
+      -id: String
+      -closed: boolean
+      +processRequest(request: RequestReader)
+      +setState(state: DoorState)
+    }
+
+    Partition "1" o-- "*" Area : contains
+    Space "1" -- "*" Door : has access doors
+    Door "1" -- "1" Space : "from"
+    Door "1" -- "1" Space : "to"
+  }
+
+  package "Door State (State Pattern)" {
+    interface DoorState {
+      +open(door: Door)
+      +close(door: Door)
+      +lock(door: Door)
+      +unlock(door: Door)
+      +unlockShortly(door: Door)
+    }
+
+    class Unlocked implements DoorState {}
+    class Locked implements DoorState {}
+    class Propped implements DoorState {}
+    class UnlockedShortly implements DoorState {}
+
+    Door "1" o-- "1" DoorState : has state
+  }
+
+  package "Users & Permissions (RBAC)" {
+    class User {
+      -name: String
+      -credential: String
+    }
+
+    class UserGroup {
+      -name: String
+      +isAuthorized(action: String, area: Area, datetime: LocalDateTime): boolean
+    }
+
+    class Schedule {
+      -startDate: LocalDate
+      -endDate: LocalDate
+      -days: DayOfWeek[]
+      -startTime: LocalTime
+      -endTime: LocalTime
+      +isInSchedule(datetime: LocalDateTime): boolean
+    }
+
+    User "many" -- "1" UserGroup : is member of >
+    UserGroup "1" -- "1" Schedule : has
+    UserGroup "many" -- "*" Area : has permissions for
+  }
+
+  package "Timing (Observer Pattern)" {
+    class Clock <<Observable>> {
+        - timer: Timer
+        +addObserver(o: Observer)
+    }
+    Door ..> java.util.Observer : <<implements>>
+    Clock "1" -- "*" Door : notifies
+  }
+
+  UnlockedShortly ..> Clock : <<uses>>
+}
+
+@enduml

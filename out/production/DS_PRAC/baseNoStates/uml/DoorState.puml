@@ -1,0 +1,86 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Door {
+- id : String
+- closed : boolean
+---
++ Door(id : String)
++ getId() : String
++ getStateName() : String
++ setState(doorState : DoorState)
++ isClosed() : boolean
++ setClosed()
++ processRequest(request : RequestReader)
+- doAction(action : String)
++ toString() : String
++ toJson() : JSONObject
+}
+
+abstract class DoorState {
+# door : Door
+---
+# DoorState(door: Door)
+{abstract} + getStateName() : String
+{abstract} + open()
+{abstract} + close()
+{abstract} + lock()
+{abstract} + unlock()
+{abstract} + unlockShortly()
+{abstract} + propped()
+}
+
+class Locked {
++ Locked(door: Door)
++ getStateName() : String
++ open()
++ close()
++ lock()
++ unlock()
++ unlockShortly()
++ propped()
+}
+
+class Unlocked {
++ Unlocked(door: Door)
++ getStateName() : String
++ open()
++ close()
++ lock()
++ unlock()
++ unlockShortly()
++ propped()
+}
+
+class UnlockedShortly {
++ UnlockedShortly(door: Door)
++ getStateName() : String
++ open()
++ close()
++ lock()
++ unlock()
++ unlockShortly()
++ propped()
+}
+
+class Propped {
++ Propped(door: Door)
++ getStateName() : String
++ open()
++ close()
++ lock()
++ unlock()
++ unlockShortly()
++ propped()
+}
+
+'---RELATIONS---
+Door "1" o- "1" DoorState : "state"
+
+DoorState <|-- Locked
+DoorState <|-- Unlocked
+DoorState <|-- UnlockedShortly
+DoorState <|-- Propped
+'------------
+
+@enduml

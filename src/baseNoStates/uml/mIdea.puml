@@ -1,0 +1,144 @@
+@startuml
+skinparam linetype ortho
+skinparam packageStyle rect
+skinparam classAttributeIconSize 0
+
+title Access Control System - UML Diagram (Updated)
+
+package "Server" {
+  class Main {
+    +main(args: String[])
+  }
+
+  class Webserver {
+    -PORT: int
+    +Webserver()
+    +run()
+  }
+
+  class SocketThread <<inner class of Webserver>> {
+    +run()
+    -makeRequest(tokens: String[]): Request
+    -makeJsonAnswer(request: Request): String
+  }
+
+  Main -right-> Webserver : creates >
+  Webserver +-- SocketThread
+}
+
+package "Managers (Singletons)" {
+  class DirectoryUsers <<Singleton>> {
+    -users: User[]
+    -userGroups: UserGroup[]
+    +getInstance(): DirectoryUsers
+    +findUserByCredential(credential: String): User
+    +makeUsers()
+    +makeUserGroups()
+  }
+
+  class DirectoryAreas <<Singleton>> {
+    -rootArea: Area
+    +getInstance(): DirectoryAreas
+    +findAreaById(id: String): Area
+  }
+}
+
+package "Requests" {
+  interface Request {
+    +process()
+    +answerToJson(): JSONObject
+  }
+
+  class RequestReader implements Request {
+    -credential: String
+    -action: String
+    -now: LocalDateTime
+    -doorId: String
+    -authorized: boolean
+  }
+}
+
+SocketThread ..> Request : <<creates>>
+Request ..> DirectoryUsers : <<uses>>
+Request ..> DirectoryAreas : <<uses>>
+
+package "Domain Model" {
+
+  package "Building Structure (Composite)" {
+    abstract class Area {
+      #id: String
+    }
+    class Partition extends Area {
+      -children: Area[*]
+    }
+    class Space extends Area {}
+
+    class Door {
+      -id: String
+      -closed: boolean
+      +processRequest(req: RequestReader)
+      +setState(state: DoorState)
+      +update(obs: Observable, arg: Object)
+    }
+
+    Partition "1" o-- "*" Area : contains
+    Space "1" -- "*" Door : has access doors
+    Door "1" -- "1" Space : "from"
+    Door "1" -- "1" Space : "to"
+  }
+
+  package "Door State (State)" {
+    interface DoorState {
+      #name: String
+      +open(door: Door)
+      +close(door: Door)
+      +lock(door: Door)
+      +unlock(door: Door)
+      +unlockShortly(door: Door)
+    }
+
+    class Unlocked implements DoorState {}
+    class Locked implements DoorState {}
+    class Propped implements DoorState {}
+    class UnlockedShortly implements DoorState {}
+
+    Door "1" o-- "1" DoorState : has state
+  }
+
+  package "Users & Permissions (RBAC)" {
+    class User {
+      -name: String
+      -credential: String
+      +canSendRequests(now: LocalDateTime): boolean
+      +canBeInSpace(space: Space): boolean
+      +canDoAction(action: String): boolean
+    }
+
+    class UserGroup {
+      -name: String
+      -allowedActions: String[]
+      +isAuthorized(action: String, area: Area, datetime: LocalDateTime): boolean
+    }
+
+    class Schedule {
+      +isInSchedule(datetime: LocalDateTime): boolean
+    }
+
+    User "many" -- "1" UserGroup : is member of >
+    UserGroup "1" -- "1" Schedule : has
+    UserGroup "many" -- "*" Area : has permissions for
+  }
+
+  package "Timing (Observer)" {
+    class Clock <<Singleton, Observable>> {
+        - timer: java.util.Timer
+        +getInstance(): Clock
+        +addObserver(o: Observer)
+    }
+    Door ..> java.util.Observer : <<implements>>
+  }
+  Clock "1" --> "*" Door : notifies
+  UnlockedShortly ..> Clock : <<uses>>
+}
+
+@enduml
