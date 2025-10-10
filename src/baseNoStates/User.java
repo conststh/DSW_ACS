@@ -1,16 +1,18 @@
 package baseNoStates;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
   private final String name;
   private final String credential;
-  private List<Area> areas =  new ArrayList<>();
+  private final string nameGroup;
+  //private List<Area> areas = new ArrayList<>();
 
-  public User(String name, String credential, List<Area> areas) {
+  public User(String name, String credential, string nameGroup) {
     this.name = name;
     this.credential = credential;
-    this.areas = areas;
+    this.nameGroup = nameGroup;
   }
 
   public String getCredential() {
@@ -21,8 +23,28 @@ public class User {
   public String toString() {
     return "User{name=" + name + ", credential=" + credential + "}";
   }
-}
-  public boolen canBeInSpace(Space space)
-  {
-    //TODO
+
+  public boolean canBeInSpace(Space space) {
+
+    for (i=0; i < group.getAuthorizedSpaces().size(); i++){
+      if (group.getAuthorizedSpaces()[i].getId() == space.getId()){
+        return true;
+      }
+    }
+    return false;
   }
+
+  public boolean canSendRequests(LocalDateTime time){
+    for (i = 0; i < group.getAuthorizedTimes().size(); i++){
+      if (group.getAuthorizedTimes()[i] == time){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean canDoAction(string action){
+    //TODO; idk if "string action" is correct
+  }
+
+}
