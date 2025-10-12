@@ -6,10 +6,9 @@ import java.util.List;
 public class User {
   private final String name;
   private final String credential;
-  private final string nameGroup;
-  //private List<Area> areas = new ArrayList<>();
+  private final String nameGroup;
 
-  public User(String name, String credential, string nameGroup) {
+  public User(String name, String credential, String nameGroup) {
     this.name = name;
     this.credential = credential;
     this.nameGroup = nameGroup;
@@ -25,9 +24,13 @@ public class User {
   }
 
   public boolean canBeInSpace(Space space) {
+    UserGroup group = DirectoryUserGroups.findGroupByName(this.name);
 
-    for (i=0; i < group.getAuthorizedSpaces().size(); i++){
-      if (group.getAuthorizedSpaces()[i].getId() == space.getId()){
+    if (group == null) {return false;}
+
+  // Delegate to the group to check the "where" permission
+    for (Area authorizedArea : group.getAuthorizedAreas()) {
+      if (authorizedArea.getSpaces().contains(space)) {
         return true;
       }
     }
@@ -35,16 +38,21 @@ public class User {
   }
 
   public boolean canSendRequests(LocalDateTime time){
-    for (i = 0; i < group.getAuthorizedTimes().size(); i++){
-      if (group.getAuthorizedTimes()[i] == time){
-        return true;
-      }
+    UserGroup group = DirectoryUserGroups.findGroupByName(this.name);
+    if (group == null || group.getSchedule() == null) {
+      return false;
     }
-    return false;
+    // Delegate to the schedule to check the "when" permission
+    return group.getSchedule().isTimeAuthorized(time);
   }
 
-  public boolean canDoAction(string action){
-    //TODO; idk if "string action" is correct
-  }
+  public boolean canDoAction(String action){
+    UserGroup group = DirectoryUserGroups.findGroupByName(this.name);
 
+    if (group == null || group.getAuthorizedActions() == null) {
+      return false;
+    }
+  // Delegate to the group to check the "what" permission
+    return group.getAuthorizedActions().contains(action);
+  }
 }

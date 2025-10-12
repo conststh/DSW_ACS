@@ -1,7 +1,17 @@
 package baseNoStates;
 
 public class DirectoryUserGroups {
-  private ArrayList<userGroup> userGroups;
+  private final ArrayList<UserGroup> userGroups;
+
+  public UserGroup findGroupByName(String name) {
+    for (UserGroup group : userGroups) {
+      if (group.getName().equals(name)) {
+        return group;
+      }
+    }
+    return null;
+  }
+
   public void makeUserGroups(){
     //TODO
   }

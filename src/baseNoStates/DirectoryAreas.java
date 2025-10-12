@@ -1,12 +1,13 @@
 package baseNoStates;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // The DirectoryAreas class is implemented as a Singleton to ensure there is only one
 // instance managing the building's structure. It builds the hierarchy of partitions,
 // spaces, and doors, and provides global access to them.
-public final class DirectoryAreas { //TODO: no entiendo lo de final
-  //private static final DirectoryAreas instance = new DirectoryAreas();
+public final class DirectoryAreas {
+  private static final DirectoryAreas instance = new DirectoryAreas();
   private Area rootArea;
   private final ArrayList<Door> allDoors;
 
@@ -16,14 +17,13 @@ public final class DirectoryAreas { //TODO: no entiendo lo de final
     allDoors = new ArrayList<>();
     makeAreas();
   }
-/**
+
   public static DirectoryAreas getInstance() {
     return instance;
   }
-*/
 
   public static Area getAreaById(String id){
-    return root.findAreaById(id);
+    return rootArea.findAreaById(id);
   }
   //Builds the entire hierarchy of partitions, spaces, and doors for the building as specified in page 14.
 
@@ -140,8 +140,7 @@ public final class DirectoryAreas { //TODO: no entiendo lo de final
    * @return A list of doors.
    */
   public ArrayList<Door> getDoorsGivingAccess(Area area) {
-    // TODO: ni idea d para q sirve este método
-    // return area.getDoorsGivingAccess();
+    return area.getDoorsGivingAccess();
   }
 
   /**

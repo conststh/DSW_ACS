@@ -8,6 +8,7 @@ public class Space extends Area{
 
   public Space(String id) {
     super(id);
+    doors = new ArrayList<>();
   }
 
   @Override
@@ -32,8 +33,8 @@ public class Space extends Area{
   }
 
   public void addDoor(Door door) {
-    if (!doors.contains(door)) {
-      doors.add(door);
+    if (!this.doors.contains(door)) {
+      this.doors.add(door);
     }
   }
 }

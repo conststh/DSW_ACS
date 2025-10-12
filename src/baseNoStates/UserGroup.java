@@ -1,21 +1,46 @@
 package baseNoStates;
 
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class UserGroup {
-  private string name;
-  private ArrayList<User> users;
-  private ArrayList<Space> authorizedSpaces;
-  private ArrayList<LocalDateTime> authorizedTimes; //horario? array de horas?
+  private final String name;
+  private final ArrayList<User> users; // who
+  private final ArrayList<String> authorizedActions; // what
+  private final ArrayList<Area> authorizedAreas;     // where
+  private final Schedule schedule;              // when
 
-  public ArrayList<Space> getAuthorizedSpaces() {return authorizedSpaces;}
-  public void setAuthorizedSpaces(ArrayList<Space> authorizedSpaces) {this.authorizedSpaces = authorizedSpaces;}
+  public UserGroup(String name, ArrayList<String> actions, ArrayList<Area> areas, Schedule schedule) {
+    this.name = name;
+    this.authorizedActions = actions;
+    this.authorizedAreas = areas;
+    this.schedule = schedule;
+    this.users = new ArrayList<>();
+  }
 
+  // Getters
   public ArrayList<User> getUsers() {return users;}
-  public void setUsers(ArrayList<User> users) {this.users = users;}
+  public ArrayList<Area> getAuthorizedAreas() {return authorizedAreas;  }
+  public Schedule getSchedule() {return schedule;  }
+  public ArrayList<String> getAuthorizedActions() {return authorizedActions;  }
+  public String getName() {return name;  }
 
-  public ArrayList<LocalDateTime> getAuthorizedTimes() {return authorizedTimes;}
-  public void setAuthorizedTimes(ArrayList<LocalDateTime> authorizedTimes){this.authorizedTimes = authorizedTimes;}
+  public void addUser(User user) {
+    if (!users.contains(user)) {
+      users.add(user);
+    }
+    else{
+      System.out.println("User "+ user.getName() + " is already in this group");
+    }
+  }
+
+  public void removeUser(User user) {
+    if (users.contains(user)) {
+      users.remove(user);
+    }
+    else{
+      System.out.println("Error in REMOVE USER");
+      System.out.println("User "+ user.getName() + " isn't in this group");
+    }
+  }
 }
