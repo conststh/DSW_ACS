@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Space extends Area{
-  private final ArrayList<Door> doors = new ArrayList<>();
+  private ArrayList<Door> doors = new ArrayList<>();
 
   public Space(String id) {
     super(id);

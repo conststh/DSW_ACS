@@ -1,6 +1,7 @@
 package baseNoStates;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 // The DirectoryAreas class is implemented as a Singleton to ensure there is only one
@@ -8,8 +9,8 @@ import java.util.List;
 // spaces, and doors, and provides global access to them.
 public final class DirectoryAreas {
   private static final DirectoryAreas instance = new DirectoryAreas();
-  private Area rootArea;
-  private final ArrayList<Door> allDoors;
+  private static Area rootArea;
+  private ArrayList<Door> allDoors;
 
   // The private constructor initializes the door list and calls makeAreas()
   // to build the entire building structure upon creation of the single instance.
@@ -69,8 +70,6 @@ public final class DirectoryAreas {
     floor1.add(it);
     floor1.add(restRoomF1);
 
-
-    // Create all doors and link them to spaces
     // Door name is on the space the door gives access to [cite: 38]
     Door d1 = new Door("D1", exterior, parking);
     Door d2 = new Door("D2", stairs, parking);
@@ -82,16 +81,7 @@ public final class DirectoryAreas {
     Door d8 = new Door("D8", corridor, room3);
     Door d9 = new Door("D9", corridor, it);
 
-    // Add doors to the global list
-    allDoors.add(d1);
-    allDoors.add(d2);
-    allDoors.add(d3);
-    allDoors.add(d4);
-    allDoors.add(d5);
-    allDoors.add(d6);
-    allDoors.add(d7);
-    allDoors.add(d8);
-    allDoors.add(d9);
+    allDoors = new ArrayList<>(Arrays.asList(d1, d2, d3, d4, d5, d6, d7, d8, d9));
 
     // Associate doors with the spaces they give access to
     parking.addDoor(d1);

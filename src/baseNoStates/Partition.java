@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Partition extends Area{
-  private final ArrayList<Area> children = new ArrayList<>();
+  private ArrayList<Area> children = new ArrayList<>();
 
   public Partition(String id) {
     super(id);
@@ -12,7 +12,7 @@ public class Partition extends Area{
 
   @Override
   public ArrayList<Space> getSpaces() {
-    List<Space> allSpaces = new ArrayList<>();
+    ArrayList<Space> allSpaces = new ArrayList<>();
   // Recursively collect spaces from children
     for (Area child : children) {
       allSpaces.addAll(child.getSpaces());
@@ -27,7 +27,7 @@ public class Partition extends Area{
     for (Area child : children) {
       allDoors.addAll(child.getDoorsGivingAccess());
     }
-    return allDoors;
+    return (ArrayList<Door>) allDoors;
   }
 
   @Override

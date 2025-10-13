@@ -24,7 +24,7 @@ public class User {
   }
 
   public boolean canBeInSpace(Space space) {
-    UserGroup group = DirectoryUserGroups.findGroupByName(this.name);
+    UserGroup group = DirectoryUserGroups.findGroupByName(this.nameGroup);
 
     if (group == null) {return false;}
 
@@ -38,7 +38,7 @@ public class User {
   }
 
   public boolean canSendRequests(LocalDateTime time){
-    UserGroup group = DirectoryUserGroups.findGroupByName(this.name);
+    UserGroup group = DirectoryUserGroups.findGroupByName(this.nameGroup);
     if (group == null || group.getSchedule() == null) {
       return false;
     }
@@ -47,7 +47,7 @@ public class User {
   }
 
   public boolean canDoAction(String action){
-    UserGroup group = DirectoryUserGroups.findGroupByName(this.name);
+    UserGroup group = DirectoryUserGroups.findGroupByName(this.nameGroup);
 
     if (group == null || group.getAuthorizedActions() == null) {
       return false;
@@ -55,4 +55,6 @@ public class User {
   // Delegate to the group to check the "what" permission
     return group.getAuthorizedActions().contains(action);
   }
+
+  public String getName() { return name; }
 }
