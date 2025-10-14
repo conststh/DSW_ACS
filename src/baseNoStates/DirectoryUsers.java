@@ -9,8 +9,8 @@ public final class DirectoryUsers {
   public static void makeUsers() {
     //TODO: make user groups according to the specifications in the comments, because
     // now all are the same
-    //DirectoryUserGroups.makeUserGroups();
-    //users.clear();
+    DirectoryUserGroups.makeUserGroups();
+    users.clear();
     // users without any privilege, just to keep temporally users instead of deleting them,
     // this is to withdraw all permissions but still to keep user data to give back
     // permissions later
