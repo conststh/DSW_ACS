@@ -1,144 +1,196 @@
 @startuml
+!theme plain
 skinparam linetype ortho
 skinparam packageStyle rect
 skinparam classAttributeIconSize 0
 
-title Access Control System - UML Diagram (Updated)
+title Access Control System - UML Diagram
 
 package "Server" {
   class Main {
-    +main(args: String[])
+    {static} +main(args: String[]): void
   }
 
-  class Webserver {
+  class WebServer {
     -PORT: int
-    +Webserver()
-    +run()
+    +WebServer()
   }
 
-  class SocketThread <<inner class of Webserver>> {
-    +run()
+  class SocketThread <<inner class>> {
+    -insocked: Socket
+    +run(): void
     -makeRequest(tokens: String[]): Request
-    -makeJsonAnswer(request: Request): String
   }
 
-  Main -right-> Webserver : creates >
-  Webserver +-- SocketThread
-}
-
-package "Managers (Singletons)" {
-  class DirectoryUsers <<Singleton>> {
-    -users: User[]
-    -userGroups: UserGroup[]
-    +getInstance(): DirectoryUsers
-    +findUserByCredential(credential: String): User
-    +makeUsers()
-    +makeUserGroups()
-  }
-
-  class DirectoryAreas <<Singleton>> {
-    -rootArea: Area
-    +getInstance(): DirectoryAreas
-    +findAreaById(id: String): Area
-  }
+  Main -right-> WebServer : creates >
+  WebServer +-- SocketThread
 }
 
 package "Requests" {
   interface Request {
-    +process()
+    +process(): void
     +answerToJson(): JSONObject
   }
 
   class RequestReader implements Request {
     -credential: String
     -action: String
-    -now: LocalDateTime
     -doorId: String
-    -authorized: boolean
+  }
+  class RequestArea implements Request {
+    -credential: String
+    -action: String
+    -areaId: String
+  }
+  class RequestRefresh implements Request {}
+}
+
+package "Managers (Singletons & Static Classes)" {
+  class DirectoryAreas <<Singleton>> {
+    -instance: DirectoryAreas
+    -rootArea: Area
+    -allDoors: Door[]
+    +getInstance(): DirectoryAreas
+    +findAreaById(id: String): Area
+    +findDoorById(id: String): Door
+  }
+
+  class DirectoryDoors {
+    {static} -allDoors: Door[]
+    {static} +makeDoors(): void
+    {static} +findDoorById(id: String): Door
+    {static} +getAllDoors(): Door[]
+  }
+
+  class DirectoryUserGroups {
+    {static} -userGroups: UserGroup[]
+    {static} +makeUserGroups(): void
+    {static} +findGroupByName(name: String): UserGroup
+  }
+
+  class DirectoryUsers {
+    {static} -users: User[]
+    {static} +makeUsers(): void
+    {static} +findUserByCredential(credential: String): User
   }
 }
 
-SocketThread ..> Request : <<creates>>
-Request ..> DirectoryUsers : <<uses>>
-Request ..> DirectoryAreas : <<uses>>
-
 package "Domain Model" {
-
   package "Building Structure (Composite)" {
     abstract class Area {
       #id: String
+      {abstract} +getSpaces(): Space[]
+      {abstract} +getDoorsGivingAccess(): Door[]
+      {abstract} +findAreaById(id: String): Area
     }
+
     class Partition extends Area {
       -children: Area[*]
+      +add(area: Area): void
     }
-    class Space extends Area {}
+
+    class Space extends Area {
+      -doors: Door[*]
+      +addDoor(door: Door): void
+    }
 
     class Door {
       -id: String
       -closed: boolean
-      +processRequest(req: RequestReader)
-      +setState(state: DoorState)
-      +update(obs: Observable, arg: Object)
+      -state: DoorState
+      -fromSpace: Space
+      -toSpace: Space
+      +setState(state: DoorState): void
+      +processRequest(req: RequestReader): void
+      -doAction(action: String): void
     }
 
+    Area <|-- Partition
+    Area <|-- Space
     Partition "1" o-- "*" Area : contains
-    Space "1" -- "*" Door : has access doors
+    Space "1" o-- "*" Door : has access doors
     Door "1" -- "1" Space : "from"
     Door "1" -- "1" Space : "to"
   }
 
   package "Door State (State)" {
-    interface DoorState {
-      #name: String
-      +open(door: Door)
-      +close(door: Door)
-      +lock(door: Door)
-      +unlock(door: Door)
-      +unlockShortly(door: Door)
+    abstract class DoorState {
+      #door: Door
+      {abstract} +getStateName(): String
+      {abstract} +open(): void
+      {abstract} +close(): void
+      {abstract} +lock(): void
+      {abstract} +unlock(): void
+      {abstract} +unlockShortly(): void
     }
 
-    class Unlocked implements DoorState {}
-    class Locked implements DoorState {}
-    class Propped implements DoorState {}
-    class UnlockedShortly implements DoorState {}
+    class Unlocked extends DoorState {}
+    class Locked extends DoorState {}
+    class Propped extends DoorState {}
+    class UnlockedShortly extends DoorState {}
 
-    Door "1" o-- "1" DoorState : has state
+    Door "1" o-- "1" DoorState : has state >
+    DoorState ..> Door : knows
+    Locked ..> Unlocked : <<creates>>
+    Locked ..> UnlockedShortly : <<creates>>
+    Unlocked ..> Locked : <<creates>>
+    Propped ..> Locked : <<creates>>
   }
 
-  package "Users & Permissions (RBAC)" {
+  package "Users & Permissions" {
     class User {
       -name: String
       -credential: String
-      +canSendRequests(now: LocalDateTime): boolean
+      -nameGroup: String
       +canBeInSpace(space: Space): boolean
+      +canSendRequests(time: LocalDateTime): boolean
       +canDoAction(action: String): boolean
     }
 
     class UserGroup {
       -name: String
-      -allowedActions: String[]
-      +isAuthorized(action: String, area: Area, datetime: LocalDateTime): boolean
+      -users: User[]
+      -authorizedActions: String[]
+      -authorizedAreas: Area[]
+      -schedule: Schedule
+      +addUser(user: User): void
     }
 
     class Schedule {
-      +isInSchedule(datetime: LocalDateTime): boolean
+      -startTime: LocalTime
+      -endTime: LocalTime
+      -allowedWeekdays: DayOfWeek[]
+      +isTimeAuthorized(time: LocalDateTime): boolean
     }
 
-    User "many" -- "1" UserGroup : is member of >
+    UserGroup "1" o-- "*" User : contains
     UserGroup "1" -- "1" Schedule : has
-    UserGroup "many" -- "*" Area : has permissions for
+    UserGroup "1" -- "*" Area : has permissions for
   }
 
-  package "Timing (Observer)" {
-    class Clock <<Singleton, Observable>> {
-        - timer: java.util.Timer
-        +getInstance(): Clock
-        +addObserver(o: Observer)
-    }
-    Door ..> java.util.Observer : <<implements>>
+  class Actions {
+    {static} +LOCK: String
+    {static} +UNLOCK: String
+    {static} +UNLOCK_SHORTLY: String
+    {static} +OPEN: String
+    {static} +CLOSE: String
   }
-  Clock "1" --> "*" Door : notifies
-  UnlockedShortly ..> Clock : <<uses>>
 }
 
+' Inter-package relationships
+Main ..> DirectoryDoors : <<initializes>>
+Main ..> DirectoryUsers : <<initializes>>
+
+SocketThread ..> Request : <<creates>>
+RequestReader ..> DirectoryDoors : <<uses>>
+RequestReader ..> DirectoryUsers : <<uses>>
+RequestArea ..> DirectoryAreas : <<uses>>
+RequestArea ..> DirectoryUsers : <<uses>>
+
+DirectoryDoors ..> DirectoryAreas : <<uses>>
+DirectoryUsers ..> DirectoryUserGroups : <<uses>>
+User ..> DirectoryUserGroups : <<uses>>
+
+Door ..> Actions : <<uses>>
+Door ..> RequestReader : <<uses>>
 @enduml
