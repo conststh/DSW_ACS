@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DirectoryUserGroups {
-  private static ArrayList<UserGroup> userGroups;
+  private static ArrayList<UserGroup> userGroups = new ArrayList<>();
 
   public DirectoryUserGroups() {
     // this.userGroups = userGroups;

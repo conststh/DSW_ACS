@@ -3,6 +3,8 @@ package baseNoStates;
 import baseNoStates.requests.RequestReader;
 import org.json.JSONObject;
 
+import java.time.LocalDateTime;
+
 /**
  * Represents the main context class in the State design pattern.
  * A Door object holds a specific state and delegates actions to its current state object.

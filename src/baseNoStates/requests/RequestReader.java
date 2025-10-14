@@ -100,12 +100,12 @@ public class RequestReader implements Request {
       this.userName = user.getName();
       this.authorized = true;
     // WHO & WHERE
-      if (!user.canAccess(door.getId())) {
+      if (!user.canBeInSpace(door.getFromSpace()) || user.canBeInSpace(door.getToSpace()) || !user.canDoAction(getAction())) {
         this.authorized = false;
         addReason("User " + this.userName + " has no permissions for door " + door.getId());
       }
     // WHEN
-      if (!door.isTimeAllowed(now)) {
+      if (!user.canSendRequests(now)) { //!door.isTimeAllowed
         this.authorized = false;
         addReason("Access to door " + door.getId() + " is not allowed at this time");
       }
