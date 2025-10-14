@@ -27,10 +27,10 @@ public class DirectoryUserGroups {
     // Es importante limpiar la lista para evitar duplicados si se llama varias veces
     //userGroups.clear();
 
-    // NOTA: La creación de Areas (ej. DirectoryAreas.getAllAreas()) se asume
-    // que es manejada en otra parte del código, ya que no se proporciona su implementación.
-    // Aquí usamos placeholders. Si no tienes una clase DirectoryAreas, deberás
-    // crear y pasar ArrayList<Area> vacíos o poblados manualmente.
+    /* NOTA: La creación de Areas (ej. DirectoryAreas.getAllAreas()) se asume
+     que es manejada en otra parte del código, ya que no se proporciona su implementación.
+     Aquí usamos placeholders. Si no tienes una clase DirectoryAreas, deberás
+    crear y pasar ArrayList<Area> vacíos o poblados manualmente.*/
     ArrayList<Area> allAreas = new ArrayList<>(); // Placeholder para todas las áreas
     ArrayList<Area> employeeAreas = new ArrayList<>(); // Placeholder para áreas de empleados
 
@@ -52,8 +52,9 @@ public class DirectoryUserGroups {
     userGroups.add(new UserGroup("employees", employeeActions, employeeAreas, employeeSchedule));
 
     // Grupo sin privilegios
-    Schedule noPrivilegeSchedule = new Schedule(LocalTime.MIN, LocalTime.MIN, new ArrayList<>()); // Un horario que nunca se cumple
-    ArrayList<String> noPrivilegeActions = new ArrayList<>();
+    Schedule noPrivilegeSchedule = new Schedule(LocalTime.MIN, LocalTime.MAX, // Horario de todo el dia pero sin permisos
+        Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)); //Toda la semana laboral
+    ArrayList<String> noPrivilegeActions = new ArrayList<>(Arrays.asList("open", "close")); // Solo puede actuar fisicamente
     ArrayList<Area> noPrivilegeAreas = new ArrayList<>();
     userGroups.add(new UserGroup("no_privilege", noPrivilegeActions, noPrivilegeAreas, noPrivilegeSchedule));
   }
