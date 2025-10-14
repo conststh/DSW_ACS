@@ -7,6 +7,7 @@ public final class DirectoryDoors {
   private static ArrayList<Door> allDoors;
 
   public static void makeDoors() {
+
     DirectoryAreas directoryAreas = DirectoryAreas.getInstance();
 
     Space exterior = (Space) directoryAreas.findAreaById("exterior");

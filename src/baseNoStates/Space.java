@@ -26,10 +26,13 @@ public class Space extends Area{
   @Override
   public Area findAreaById(String id) {
     if (this.getId().equals(id)) {
+      System.out.println("Found area by his ID: " + id);
       return this;
     }
-    System.out.println("Can't find area by his ID ");
-    return null; // No se encontró y no hay más áreas hijas que explorar
+    else {
+      System.out.println("Can't find area by his ID: " + id);
+      return null; // No se encontró y no hay más áreas hijas que explorar
+    }
   }
 
   public void addDoor(Door door) {

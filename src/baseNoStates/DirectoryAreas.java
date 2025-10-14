@@ -10,7 +10,7 @@ import java.util.List;
 public final class DirectoryAreas {
   private static final DirectoryAreas instance = new DirectoryAreas();
   private static Area rootArea;
-  private ArrayList<Door> allDoors;
+  private final ArrayList<Door> allDoors;
 
   // The private constructor initializes the door list and calls makeAreas()
   // to build the entire building structure upon creation of the single instance.
@@ -31,7 +31,7 @@ public final class DirectoryAreas {
   private void makeAreas() {
     // Partitions for the main structure
     Partition building = new Partition("building");
-    this.rootArea = building;
+    rootArea = building;
     Partition basement = new Partition("basement");
     Partition groundFloor = new Partition("ground floor");
     Partition floor1 = new Partition("floor 1");
@@ -69,30 +69,6 @@ public final class DirectoryAreas {
     floor1.add(corridor);
     floor1.add(it);
     floor1.add(restRoomF1);
-
-    // Door name is on the space the door gives access to [cite: 38]
-    Door d1 = new Door("D1", exterior, parking);
-    Door d2 = new Door("D2", stairs, parking);
-    Door d3 = new Door("D3", exterior, hall);
-    Door d4 = new Door("D4", hall, stairs);
-    Door d5 = new Door("D5", hall, room1);
-    Door d6 = new Door("D6", hall, room2);
-    Door d7 = new Door("D7", corridor, stairs);
-    Door d8 = new Door("D8", corridor, room3);
-    Door d9 = new Door("D9", corridor, it);
-
-    allDoors = new ArrayList<>(Arrays.asList(d1, d2, d3, d4, d5, d6, d7, d8, d9));
-
-    // Associate doors with the spaces they give access to
-    parking.addDoor(d1);
-    parking.addDoor(d2);
-    hall.addDoor(d3);
-    stairs.addDoor(d4); // Access to stairs from hall
-    room1.addDoor(d5);
-    room2.addDoor(d6);
-    stairs.addDoor(d7); // Access to stairs from corridor
-    room3.addDoor(d8);
-    it.addDoor(d9);
   }
 
   /**
