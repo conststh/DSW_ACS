@@ -92,12 +92,23 @@ public class RequestReader implements Request {
   // only for testing
   private void authorize(User user, Door door) {
     if (user == null) {
-      authorized = false;
+      this.authorized = false;
       addReason("user doesn't exists");
+      this.userName = "unknownUser";
     } else {
-      //TODO: get the who, where, when and what in order to decide, and if not
-      // authorized add the reason(s)
-      authorized = true;
+      //TODO: get the who, where, when and what(authorize) NECESITA REVISAR
+      this.userName = user.getName();
+      this.authorized = true;
+    // WHO & WHERE
+      if (!user.canAccess(door.getId())) {
+        this.authorized = false;
+        addReason("User " + this.userName + " has no permissions for door " + door.getId());
+      }
+    // WHEN
+      if (!door.isTimeAllowed(now)) {
+        this.authorized = false;
+        addReason("Access to door " + door.getId() + " is not allowed at this time");
+      }
     }
   }
 }
