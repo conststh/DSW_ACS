@@ -77,7 +77,7 @@ public final class DirectoryAreas {
    * @param id The identifier of the area to find.
    * @return The Area object if found, otherwise null.
    */
-  public Area findAreaById(String id) {
+  public static Area findAreaById(String id) {
     return rootArea.findAreaById(id);
   }
 

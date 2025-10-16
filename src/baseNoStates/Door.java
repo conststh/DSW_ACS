@@ -3,6 +3,8 @@ package baseNoStates;
 import baseNoStates.requests.RequestReader;
 import org.json.JSONObject;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.time.LocalDateTime;
 
 /**
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
  * A Door object holds a specific state and delegates actions to its current state object.
  * It also manages its physical condition (open or closed).
  */
-public class Door {
+public class Door implements Observer {
   private final String id;
   private boolean closed; // Represents the physical state of the door (true if closed, false if open)
   private DoorState state; // The current state of the door (e.g., Locked, Unlocked)
@@ -28,6 +30,13 @@ public class Door {
     this.state = new Unlocked(this);
     this.fromSpace = from;
     this.toSpace = to;
+    // Every door, when created, starts observing the clock
+    Clock.getInstance().addObserver(this);
+  }
+  @Override
+  public void update(Observable o, Object arg) {
+    // We delegate the handling of the "tick" to the current state
+    state.tick();
   }
 
   /**

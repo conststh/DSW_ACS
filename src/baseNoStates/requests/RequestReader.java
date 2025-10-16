@@ -99,8 +99,9 @@ public class RequestReader implements Request {
       //TODO: get the who, where, when and what(authorize) NECESITA REVISAR
       this.userName = user.getName();
       this.authorized = true;
+
     // WHO & WHERE
-      if (!user.canBeInSpace(door.getFromSpace()) || user.canBeInSpace(door.getToSpace()) || !user.canDoAction(getAction())) {
+      if (!user.canBeInSpace(door.getFromSpace()) || !user.canBeInSpace(door.getToSpace()) || !user.canDoAction(getAction())) {
         this.authorized = false;
         addReason("User " + this.userName + " has no permissions for door " + door.getId());
       }
