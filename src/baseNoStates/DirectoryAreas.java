@@ -95,6 +95,8 @@ public final class DirectoryAreas {
     return null;
   }
 
+  public Area getRootArea() {return rootArea;}
+
   public ArrayList<Door> getAllDoors() {
     return allDoors;
   }

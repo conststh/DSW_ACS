@@ -91,7 +91,7 @@ public class RequestReader implements Request {
   // the result is put into the request object plus, if not authorized, why not,
   // only for testing
   private void authorize(User user, Door door) {
-    if (user == null) {
+    if (user == null) { //Procesa que el usuario es null, aunque el usuario existe.
       this.authorized = false;
       addReason("user doesn't exists");
       this.userName = "unknownUser";
