@@ -38,4 +38,6 @@ public abstract class DoorState {
 
   // Handles the 'propped' action for the door in a specific state.
   public abstract void propped();
+
+  public void tick(){};
 }

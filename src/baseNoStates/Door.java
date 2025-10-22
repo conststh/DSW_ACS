@@ -36,7 +36,7 @@ public class Door implements Observer {
   @Override
   public void update(Observable o, Object arg) {
     // We delegate the handling of the "tick" to the current state
-    //state.tick();
+    state.tick();
   }
 
   /**

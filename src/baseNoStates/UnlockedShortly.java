@@ -1,10 +1,15 @@
 package baseNoStates;
 
+import java.time.LocalDateTime;
+
 public class UnlockedShortly extends DoorState {
+
+  private final LocalDateTime expiryTime;
 
   public UnlockedShortly(Door door) {
     super(door);
-    startLockTimer();
+    // Set the expiry time to 10 seconds from now
+    this.expiryTime = LocalDateTime.now().plusSeconds(10);
   }
 
 
@@ -57,21 +62,22 @@ public class UnlockedShortly extends DoorState {
   public void propped() {
   }
 
-
-  private void startLockTimer() {
-    new Thread(() -> {
-      try {
-        Thread.sleep(10000); // 10 seconds wait
-
-        if (door.isClosed()) {
-          door.setState(new Locked(door));
-          System.out.println("The door " + door.getId() + " is now locked (after short unlock).");
-        }
-
-      } catch (InterruptedException e) {
-
+  /**
+   * This method is called by the Door (Observer) every time the Clock (Observable) ticks.
+   */
+  @Override
+  public void tick() {
+    // Check if the current time is after the expiry time
+    if (LocalDateTime.now().isAfter(expiryTime)) {
+        // Timer has finished. Now, apply the correct transition logic based on the door's physical state.
+      if (door.isClosed()) {
+        door.setState(new Locked(door));
+        System.out.println("The door " + door.getId() + " is now locked (after short unlock).");
+      } else {
+      // This is the logic that was missing/buggy
         door.setState(new Propped(door));
+        System.out.println("The door " + door.getId() + " is now propped (after short unlock timed out while open).");
       }
-    }).start();
+    }
   }
 }
