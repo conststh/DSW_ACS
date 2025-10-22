@@ -25,7 +25,7 @@ public final class DirectoryUsers {
     // ground floor, floor1, exterior, stairs (this, for all), that is, everywhere but the parking
     users.add(new User("Ernest", "74984",  "employees"));
     //Objects.requireNonNull(DirectoryUserGroups.findGroupByName("employees")).addUser(new User("Ernest", "74984",  "employees"));
-    users.add(new User("Eulalia", "43295",  "building"));
+    users.add(new User("Eulalia", "43295",  "employees"));
     //Objects.requireNonNull(DirectoryUserGroups.findGroupByName("employees")).addUser(new User("Eulalia", "43295", "employees"));
 
     // managers :

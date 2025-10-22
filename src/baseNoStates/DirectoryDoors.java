@@ -32,6 +32,25 @@ public final class DirectoryDoors {
     Door d9 = new Door("D9", corridor, it);
 
     allDoors = new ArrayList<>(Arrays.asList(d1, d2, d3, d4, d5, d6, d7, d8, d9));
+
+    exterior.addDoor(d1);
+    parking.addDoor(d1);
+    stairs.addDoor(d2);
+    parking.addDoor(d2);
+    exterior.addDoor(d3);
+    hall.addDoor(d3);
+    hall.addDoor(d4);
+    stairs.addDoor(d4);
+    hall.addDoor(d5);
+    room1.addDoor(d5);
+    hall.addDoor(d6);
+    room2.addDoor(d6);
+    corridor.addDoor(d7);
+    stairs.addDoor(d7);
+    corridor.addDoor(d8);
+    room3.addDoor(d8);
+    corridor.addDoor(d9);
+    it.addDoor(d9);
   }
 
   public static Door findDoorById(String id) {

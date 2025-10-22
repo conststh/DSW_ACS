@@ -154,6 +154,8 @@ public class Door implements Observer {
     json.put("id", id);
     json.put("state", getStateName());
     json.put("closed", closed);
+    json.put("from", fromSpace.getId());
+    json.put("to", toSpace.getId());
     return json;
   }
 }
