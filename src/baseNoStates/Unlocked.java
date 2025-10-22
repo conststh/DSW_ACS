@@ -72,7 +72,9 @@ public class Unlocked extends DoorState {
   // Action to unlock the door temporarily. Does nothing as the door is already unlocked.
   @Override
   public void unlockShortly() {
-    System.out.println("Can't unlock the door " + door.getId() + ", is already unlocked.");
+    // El estado debe cambiar a UnlockedShortly para iniciar el temporizador.
+    door.setState(new UnlockedShortly(door));
+    System.out.println("The door " + door.getId() + " is now unlocked shortly.");
   }
 
   // Action to prop the door. This action has no effect in the Unlocked state.
