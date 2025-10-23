@@ -21,13 +21,13 @@ public class Schedule {
     DayOfWeek day = time.getDayOfWeek();
     LocalTime now = time.toLocalTime();
 
-    // Check if the current day of the week is allowed
+    // Miramos si el dia actual de la semana está permitido
     boolean isDayAllowed = allowedWeekdays.contains(day);
     if (!isDayAllowed) {
       return false;
     }
 
-    // Check if the time is within the start/end interval
+    // Comprobamos que el tiempo esté en el intervalo de inicio/final
     boolean isAfterOrAtStart = !now.isBefore(startTime);
     boolean isBeforeEnd = now.isBefore(endTime);
 
