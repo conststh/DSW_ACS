@@ -5,10 +5,10 @@ import java.util.List;
 
 public class UserGroup {
   private final String name;
-  private final ArrayList<User> users; // who
-  private final ArrayList<String> authorizedActions; // what
-  private final ArrayList<Area> authorizedAreas;     // where
-  private final Schedule schedule;              // when
+  private final ArrayList<User> users; // quién
+  private final ArrayList<String> authorizedActions; // qué
+  private final ArrayList<Area> authorizedAreas;     // dónde
+  private final Schedule schedule;              // cuando
 
   public UserGroup(String name, ArrayList<String> actions, ArrayList<Area> areas, Schedule schedule) {
     this.name = name;

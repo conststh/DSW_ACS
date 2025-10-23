@@ -28,7 +28,7 @@ public class User {
 
     if (group == null) {return false;}
 
-  // Delegate to the group to check the "where" permission
+  // Delega al grupo para encontrar el permiso de "dónde" (Area)
     for (Area authorizedArea : group.getAuthorizedAreas()) {
       if (authorizedArea.getSpaces().contains(space)) {
         return true;
@@ -42,7 +42,7 @@ public class User {
     if (group == null || group.getSchedule() == null) {
       return false;
     }
-    // Delegate to the schedule to check the "when" permission
+    // Delega al horario para comprobar el permiso de "cuándo" (Horario)
     return group.getSchedule().isTimeAuthorized(time);
   }
 
@@ -52,7 +52,7 @@ public class User {
     if (group == null || group.getAuthorizedActions() == null) {
       return false;
     }
-  // Delegate to the group to check the "what" permission
+  // Delega al grupo para encontrar el permiso "qué" (acción)
     return group.getAuthorizedActions().contains(action);
   }
 
