@@ -2,16 +2,19 @@ package baseNoStates;
 
 import java.time.LocalDateTime;
 
+/**
+ * Representa el estado 'Desbloqueado Temporalmente' (UnlockedShortly)
+ * Este estado se activa con 'unlockShortly' y dura un tiempo limitado (10 segundos)
+ * Utiliza el método 'tick' para gestionar el temporizador
+ */
 public class UnlockedShortly extends DoorState {
-
   private final LocalDateTime expiryTime;
 
   public UnlockedShortly(Door door) {
     super(door);
-    // Set the expiry time to 10 seconds from now
+    // Define el tiempo de expiración (ahora + 10 segundos)
     this.expiryTime = LocalDateTime.now().plusSeconds(10);
   }
-
 
   @Override
   public String getStateName() {
@@ -59,22 +62,23 @@ public class UnlockedShortly extends DoorState {
   }
 
   @Override
-  public void propped() {
-  }
+  public void propped() {}
 
   /**
-   * This method is called by the Door (Observer) every time the Clock (Observable) ticks.
+   * Método llamado por la Puerta (Observer) cada vez que el Reloj (Observable) envía un 'tick'
+   * Verifica si el tiempo de expiración ha pasado
    */
   @Override
   public void tick() {
-    // Check if the current time is after the expiry time
+    // Comprueba si la hora actual es posterior a la hora de expiración
     if (LocalDateTime.now().isAfter(expiryTime)) {
-        // Timer has finished. Now, apply the correct transition logic based on the door's physical state.
+      // El temporizador ha terminado
       if (door.isClosed()) {
+        // Si la puerta está CERRADA cuando expira el tiempo, se bloquea
         door.setState(new Locked(door));
         System.out.println("The door " + door.getId() + " is now locked (after short unlock).");
       } else {
-      // This is the logic that was missing/buggy
+        // Si la puerta está ABIERTA cuando expira el tiempo, entra en estado 'Propped'
         door.setState(new Propped(door));
         System.out.println("The door " + door.getId() + " is now propped (after short unlock timed out while open).");
       }

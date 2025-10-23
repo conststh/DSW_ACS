@@ -1,12 +1,14 @@
 package baseNoStates;
 
-
+/**
+ * Representa el estado 'Mantenida Abierta' (Propped) de una puerta
+ * Este estado ocurre si una puerta estaba en 'UnlockedShortly', se abrió, y el temporizador expiró antes de que se cerrara
+ */
 public class Propped extends DoorState {
 
   public Propped(Door door) {
     super(door);
   }
-
 
   @Override
   public String getStateName() {
@@ -22,6 +24,7 @@ public class Propped extends DoorState {
   public void close() {
     door.setClosed(true);
     System.out.println("The door " + door.getId() + " is now closed.");
+    // Transiciona a Locked, ya que el estado 'propped' implica que el permiso de desbloqueo expiró
     door.setState(new Locked(door));
     System.out.println("The door " + door.getId() + " is now locked (after being propped).");
   }

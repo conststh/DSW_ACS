@@ -3,13 +3,20 @@ package baseNoStates;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public final class DirectoryDoors {
-  private static ArrayList<Door> allDoors;
+// Clase que se encarga de crear y gestionar el directorio global de puertas
 
+public final class DirectoryDoors {
+  private static ArrayList<Door> allDoors; // Lista estática de todas las puertas del edificio
+
+  /**
+   * Crea todas las instancias de Puertas (Door) y las conecta con sus respectivos Espacios (Space)
+   * Este método se apoya en DirectoryAreas para encontrar los espacios por su ID.
+   */
   public static void makeDoors() {
 
     DirectoryAreas directoryAreas = DirectoryAreas.getInstance();
 
+    // Obtener las instancias de los espacios necesarios
     Space exterior = (Space) directoryAreas.findAreaById("exterior");
     Space parking = (Space) directoryAreas.findAreaById("parking");
     Space stairs = (Space) directoryAreas.findAreaById("stairs");
@@ -20,7 +27,7 @@ public final class DirectoryDoors {
     Space room3 = (Space) directoryAreas.findAreaById("room 3");
     Space it = (Space) directoryAreas.findAreaById("IT");
 
-    // Door name is on the space the door gives access to [cite: 38]
+    // Crear cada puerta especificando su ID y los dos espacios que conecta
     Door d1 = new Door("D1", exterior, parking);
     Door d2 = new Door("D2", stairs, parking);
     Door d3 = new Door("D3", exterior, hall);
@@ -31,8 +38,10 @@ public final class DirectoryDoors {
     Door d8 = new Door("D8", corridor, room3);
     Door d9 = new Door("D9", corridor, it);
 
+    // Añadir todas las puertas creadas a la lista estática global
     allDoors = new ArrayList<>(Arrays.asList(d1, d2, d3, d4, d5, d6, d7, d8, d9));
 
+    // Establecer la relación bidireccional: añadir cada puerta a los espacios que conecta
     exterior.addDoor(d1);
     parking.addDoor(d1);
     stairs.addDoor(d2);
@@ -60,10 +69,9 @@ public final class DirectoryDoors {
       }
     }
     System.out.println("door with id " + id + " not found");
-    return null; // otherwise we get a Java error
+    return null; // Devuelve null si no se encuentra la puerta
   }
 
-  // this is needed by RequestRefresh
   public static ArrayList<Door> getAllDoors() {
     System.out.println(allDoors);
     return allDoors;

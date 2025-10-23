@@ -2,6 +2,10 @@ package baseNoStates;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase abstracta que representa el componente en el patrón Composite
+ * Define la interfaz común para todos los elementos de la jerarquía del edificio,tanto Space como Partition
+ */
 public abstract class Area {
   protected final String id;
 
@@ -14,6 +18,8 @@ public abstract class Area {
   }
 
   public abstract ArrayList<Space> getSpaces();
+
   public abstract ArrayList<Door> getDoorsGivingAccess();
+
   public abstract Area findAreaById(String id);
 }

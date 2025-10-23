@@ -1,29 +1,20 @@
 package baseNoStates;
 
 /**
- * Represents the 'Unlocked' state of a door.
- * In this state, the door can be opened, closed, and locked.
+ * Representa el estado 'Desbloqueado' (Unlocked) de una puerta
+ * En este estado, la puerta puede ser abierta, cerrada y bloqueada
  */
 public class Unlocked extends DoorState {
 
-  /**
-   * Constructs an Unlocked state object.
-   * @param door The door this state belongs to.
-   */
   public Unlocked(Door door) {
     super(door);
   }
 
-  /**
-   * Returns the name of the state.
-   * @return The string "unlocked".
-   */
   @Override
   public String getStateName() {
     return "unlocked";
   }
 
-  // Action to open the door. Succeeds if the door is physically closed.
   @Override
   public void open() {
     if (door.isClosed())
@@ -37,7 +28,6 @@ public class Unlocked extends DoorState {
     }
   }
 
-  // Action to close the door. Succeeds if the door is physically open.
   @Override
   public void close() {
     if (door.isClosed())
@@ -51,7 +41,6 @@ public class Unlocked extends DoorState {
     }
   }
 
-  // Action to lock the door. Succeeds if the door is physically closed, transitioning its state to Locked.
   @Override
   public void lock() {
     if (door.isClosed()) {
@@ -63,24 +52,17 @@ public class Unlocked extends DoorState {
     }
   }
 
-  // Action to unlock the door. Does nothing as the door is already unlocked.
   @Override
   public void unlock() {
     System.out.println("Can't unlock the door " + door.getId() + ", it's already unlocked.");
   }
 
-  // Action to unlock the door temporarily. Does nothing as the door is already unlocked.
   @Override
   public void unlockShortly() {
-    // El estado debe cambiar a UnlockedShortly para iniciar el temporizador.
     door.setState(new UnlockedShortly(door));
     System.out.println("The door " + door.getId() + " is now unlocked shortly.");
   }
 
-  // Action to prop the door. This action has no effect in the Unlocked state.
   @Override
-  public void propped() {
-    // This action is not applicable in this state.
-    // Propping might be an event that transitions the door to a 'Propped' state.
-  }
+  public void propped() {}
 }
