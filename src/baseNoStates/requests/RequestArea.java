@@ -63,27 +63,29 @@ public class RequestArea implements Request {
             + "}";
   }
 
-  // processing the request of an area is creating the corresponding door requests and forwarding
-  // them to all of its doors. For some it may be authorized and action will be done, for others
-  // it won't be authorized and nothing will happen to them.
+
+  //Procesar la solicitud de un área es crear las solicitudes de puerta y enviarlas a todas sus puertas.
+  //Para algunas se autorizará y su acción se hará, para otras no se autorizará y no les pasará nada.
   public void process() {
-    // commented out until Area, baseNoStates.Space and Partition are implemented
 
-    // make the door requests and put them into the area request to be authorized later and
-    // processed later
+    //Hacer las solicitudes de puertas y ponerlas en el area request para que se autorizen y se procesen más tarde
     Area area = DirectoryAreas.findAreaById(areaId);
-    // an Area is a baseNoStates.Space or a Partition
+    // Un area es un baseNoStates.Space o una Partition
     if (area != null) {
-      // is null when from the app we click on an action but no place is selected because
-      // there (flutter) I don't control like I do in javascript that all the parameters are provided
+      //Es null cuando desde la app pulsamos en una acción pero no se selecciona ningún lugar porque en Flutter no controlo
+      // de la misma manera que en JavaScript (se dan todos los parámetros)
 
-      // Make all the door requests, one for each door in the area, and process them.
-      // Look for the doors in the spaces of this area that give access to them.
+
+
+      //Hacemos todas las solicitudes de puertas, una por cada puerta en el área, y las procesamos.
+      //Buscamos las puertas en los espacios de esta área que le dan acceso.
       for (Door door : area.getDoorsGivingAccess()) {
         RequestReader requestReader = new RequestReader(credential, action, now, door.getId());
         requestReader.process();
         // after process() the area request contains the answer as the answer
         // to each individual door request, that is read by the simulator/Flutter app
+        //Después de process() la solicitud de area contiene la respuesta como la respuesta
+        // a cada solicitud individual, que es leída por el simulador o la app en Flutter
         requests.add(requestReader);
       }
     }

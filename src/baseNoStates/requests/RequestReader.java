@@ -81,31 +81,30 @@ public class RequestReader implements Request {
     Door door = DirectoryDoors.findDoorById(doorId);
     assert door != null : "door " + doorId + " not found";
     authorize(user, door);
-    // this sets the boolean authorize attribute of the request
+    // Esto establece el atributo booleano "authorize" de la solicitud
     door.processRequest(this);
-    // even if not authorized we process the request, so that if desired we could log all
-    // the requests made to the server as part of processing the request
+    //aunque no hayamos autorizado la solicitud, para que si queremos podamos registrar
+    // todas las solicitudes hechas al servidor como parte del procesamiento de la solicitud
     doorClosed = door.isClosed();
   }
 
-  // the result is put into the request object plus, if not authorized, why not,
-  // only for testing
+
+  //El resultado se introduce en el objeto de solicitud y si no está autorizado también (solo para testing)
   private void authorize(User user, Door door) {
     if (user == null) { //Procesa que el usuario es null, aunque el usuario existe.
       this.authorized = false;
       addReason("user doesn't exists");
       this.userName = "unknownUser";
     } else {
-      //TODO: get the who, where, when and what(authorize) NECESITA REVISAR
       this.userName = user.getName();
       this.authorized = true;
 
-    // WHO & WHERE
+    // Quién y dónde
       if (!user.canBeInSpace(door.getFromSpace()) || !user.canBeInSpace(door.getToSpace()) || !user.canDoAction(getAction())) {
         this.authorized = false;
         addReason("User " + this.userName + " has no permissions for door " + door.getId());
       }
-    // WHEN
+    // Cuándo
       if (!user.canSendRequests(now)) { //!door.isTimeAllowed
         this.authorized = false;
         addReason("Access to door " + door.getId() + " is not allowed at this time");

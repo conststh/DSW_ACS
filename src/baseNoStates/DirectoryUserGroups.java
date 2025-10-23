@@ -25,14 +25,19 @@ public class DirectoryUserGroups {
   // Métode generado para crear los grupos de usuarios
   public static void makeUserGroups() {
     /*
-    For allAreas, we just need to add the building in our array, as it contains all its children and therefore, it'll let us do any action to any door.
-    For employeeAreas, we need to search every area that employees can access, and add each one to an array.
+    allAreas es la array que guardará todas las áreas del edificio. La usaremos para los grupos "admin" y "manager", que tienen acceso a todas las zonas.
+    Solo es necesario guardar "building", porque este contiene a todas las demás áreas.
      */
     Area building = DirectoryAreas.findAreaById("building");
     ArrayList<Area> allAreas = new ArrayList<>();
     if (building != null) {
       allAreas.add(building);
     }
+
+    /*
+    employeeAreas es la array que guardará todas las zonas a las que pueden acceder los empleados (grupo "employees")
+    Las areas que hay que guardar son "exterior", "stairs", "ground floor" y "floor 1"
+     */
 
     ArrayList<Area> employeeAreas = new ArrayList<>();
     Area exterior = DirectoryAreas.findAreaById("exterior");
@@ -45,30 +50,31 @@ public class DirectoryUserGroups {
     if (groundFloor != null) employeeAreas.add(groundFloor);
     if (floor1 != null) employeeAreas.add(floor1);
 
-    //Group creation
+    //Creamos los grupos
 
-    // Admin group can enter any day, at any time, to all areas, and can do any action
-    Schedule adminSchedule = new Schedule(LocalTime.MIN, LocalTime.MAX, Arrays.asList(DayOfWeek.values())); //Any day, anytime
-    ArrayList<String> adminActions = new ArrayList<>(Arrays.asList("open", "close", "lock", "unlock", "unlock_shortly")); //All actions
-    userGroups.add(new UserGroup("admin", adminActions, allAreas, adminSchedule)); //We create "admin" group
+    // Admin: pueden entrar cualquier día a cualquier hora, y hacer todas las acciones.
+    Schedule adminSchedule = new Schedule(LocalTime.MIN, LocalTime.MAX, Arrays.asList(DayOfWeek.values()));
+    ArrayList<String> adminActions = new ArrayList<>(Arrays.asList("open", "close", "lock", "unlock", "unlock_shortly"));
+    userGroups.add(new UserGroup("admin", adminActions, allAreas, adminSchedule));
 
-    //Managers can only enter during from 8:00 to 20:00, on work days, to all areas and can do any action
+    //Managers: Solo pueden acceder de 8 a 20 en días entre semana y sábados, también pueden hacer cualquier acción.
     Schedule managerSchedule = new Schedule(LocalTime.of(8, 0), LocalTime.of(20, 0),
         Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY)); //Work days from 8:00 to 20:00
     ArrayList<String> managerActions = new ArrayList<>(Arrays.asList("open", "close", "lock", "unlock", "unlock_shortly")); //All actions
     userGroups.add(new UserGroup("managers", managerActions, allAreas, managerSchedule)); //We create "managers" group
 
-    //Employees can enter from 9 to 17, Monday to Friday, and can only unlock shortly, apart from physically acting. They can only enter to the areas specified in employeeAreas
+    //Employees: Pueden acceder a sus espacios designados de lunes a viernes de 9 a 17, solo puede abrir, cerrar y desbloquear brevemente.
     Schedule employeeSchedule = new Schedule(LocalTime.of(9, 0), LocalTime.of(17, 0),
-        Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)); //Mon-Fri; 9 to 17
-    ArrayList<String> employeeActions = new ArrayList<>(Arrays.asList("open", "close", "unlock_shortly")); //Only unlock shortly and act physically (open, close)
-    userGroups.add(new UserGroup("employees", employeeActions, employeeAreas, employeeSchedule)); //We create "employee" group
+        Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY));
+    ArrayList<String> employeeActions = new ArrayList<>(Arrays.asList("open", "close", "unlock_shortly"));
+    userGroups.add(new UserGroup("employees", employeeActions, employeeAreas, employeeSchedule));
 
-    //Users with no privilege can't do anything but open and close doors, but still need a schedule
+    //Grupo de usuarios sin privilegios: Solo pueden abrir y cerrar puertas.
+    // Al no ser parte del personal del edificio, solo pueden abrir y cerrar puertas, pero no tienen permisos para acceder a ninguna zona
     Schedule noPrivilegeSchedule = new Schedule(LocalTime.MIN, LocalTime.MAX,
-        Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY)); //Can come at any time, but have no permissions
-    ArrayList<String> noPrivilegeActions = new ArrayList<>(Arrays.asList("open", "close")); //Can just open/close doors
-    ArrayList<Area> noPrivilegeAreas = new ArrayList<>(); //We create empty list (can't enter to any space)
-    userGroups.add(new UserGroup("no_privilege", noPrivilegeActions, noPrivilegeAreas, noPrivilegeSchedule)); //We create "no_privilege" group
+        Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY));
+    ArrayList<String> noPrivilegeActions = new ArrayList<>(Arrays.asList("open", "close"));
+    ArrayList<Area> noPrivilegeAreas = new ArrayList<>();
+    userGroups.add(new UserGroup("no_privilege", noPrivilegeActions, noPrivilegeAreas, noPrivilegeSchedule));
   }
 }

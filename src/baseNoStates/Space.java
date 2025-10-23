@@ -30,8 +30,6 @@ public class Space extends Area{
       return this;
     }
     else {
-      //System.out.println("Can't find area by his ID: " + id);
-      // comentado para q no se vea como falla la busqueda (pq nos da igual)
       return null; // No se encontró y no hay más áreas hijas que explorar
     }
   }
