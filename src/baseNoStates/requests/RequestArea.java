@@ -69,7 +69,6 @@ public class RequestArea implements Request {
   public void process() {
     // commented out until Area, baseNoStates.Space and Partition are implemented
 
-
     // make the door requests and put them into the area request to be authorized later and
     // processed later
     Area area = DirectoryAreas.findAreaById(areaId);

@@ -22,10 +22,6 @@ public final class DirectoryAreas {
   public static DirectoryAreas getInstance() {
     return instance;
   }
-
-  public static Area getAreaById(String id){
-    return rootArea.findAreaById(id);
-  }
   //Builds the entire hierarchy of partitions, spaces, and doors for the building as specified in page 14.
 
   private void makeAreas() {

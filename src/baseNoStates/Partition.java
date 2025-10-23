@@ -22,12 +22,12 @@ public class Partition extends Area{
 
   @Override
   public ArrayList<Door> getDoorsGivingAccess() {
-    List<Door> allDoors = new ArrayList<>();
+    ArrayList<Door> allDoors = new ArrayList<>();
   // Recursively collect doors from children
     for (Area child : children) {
       allDoors.addAll(child.getDoorsGivingAccess());
     }
-    return (ArrayList<Door>) allDoors;
+    return allDoors;
   }
 
   @Override

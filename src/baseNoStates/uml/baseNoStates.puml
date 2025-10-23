@@ -1,0 +1,267 @@
+@startuml
+skinparam classAttributeIconSize 0
+package DirectoryDoors{
+    class Door {
+    - id : String
+    - closed : boolean
+    - state : DoorState
+    - fromSpace : Space
+    - toSpace : Space
+    ---
+    + Door(id : String, from : Space, to : Space)
+    + update(o : Observable, arg Object)
+    + getId() : String
+    + getStateName() : String
+    + setState(doorState : DoorState)
+    + isClosed() : boolean
+    + getFromSpace() : Space
+    + getToSpace() : Space
+    + setClosed(closed : Boolean)
+    + processRequest(request : RequestReader)
+    - doAction(action : String)
+    + toString() : String
+    + toJson() : JSONObject
+    }
+
+    abstract class DoorState {
+    # door : Door
+    ---
+    # DoorState(door: Door)
+    {abstract} + getStateName() : String
+    {abstract} + open()
+    {abstract} + close()
+    {abstract} + lock()
+    {abstract} + unlock()
+    {abstract} + unlockShortly()
+    {abstract} + propped()
+    + tick()
+    }
+
+    class Locked {
+    + Locked(door: Door)
+    + getStateName() : String
+    + open()
+    + close()
+    + lock()
+    + unlock()
+    + unlockShortly()
+    + propped()
+    }
+
+    class Unlocked {
+    + Unlocked(door: Door)
+    + getStateName() : String
+    + open()
+    + close()
+    + lock()
+    + unlock()
+    + unlockShortly()
+    + propped()
+    }
+
+    class UnlockedShortly {
+    + UnlockedShortly(door: Door)
+    + getStateName() : String
+    + open()
+    + close()
+    + lock()
+    + unlock()
+    + unlockShortly()
+    + propped()
+    + tick()
+    }
+
+    class Propped {
+    + Propped(door: Door)
+    + getStateName() : String
+    + open()
+    + close()
+    + lock()
+    + unlock()
+    + unlockShortly()
+    + propped()
+    }
+
+    class DirectoryDoors {
+    - {static} allDoors : Door[]
+    ---
+    + {static} makeDoors()
+    + {static} findDoorById(id : String) : Door
+    + {static} getAllDoors() : Door[]
+    }
+
+    class Actions{
+    {static}+LOCK : String
+    {static}+UNLOCK : String
+    {static}+UNLOCK_SHORTLY : String
+    {static}+OPEN : String
+    {static}+CLOSE : String
+    }
+
+    class Clock{
+    {static}-instance : Clock
+    -timer : Timer
+    ---
+    -Clock()
+    {static}+getInstance() : Clock
+    }
+
+    '---RELATIONS---
+    Door "1" o- "1" DoorState : "state"
+
+    DoorState <|-- Locked
+    DoorState <|-- Unlocked
+    DoorState <|-- UnlockedShortly
+    DoorState <|-- Propped
+    Door "*" <-- DirectoryDoors : "allDoors"
+
+    Clock <|. Door : "Observ"
+    '------------
+}
+
+package DirectoryAreas{
+    class DirectoryAreas{
+    {static} -instance : DirectoryAreas
+    {static} -rootArea : Area
+    -allDoors : Door[]
+    ---
+    - DirectoryAreas()
+    {static} +getInstance() : DirectoryAreas
+    -makeAreas()
+    {static} +findAreaById(id : String) : Area
+    {static} +findDoorById(id : String) : Door
+    +getRootArea() : Area
+    +getAllDoors() : Door[]
+    +getDoorsGivingAccess(area: Area) : Door[]
+    +getSpaces(area: Area) : Space[]
+    }
+
+    abstract class Area {
+    #id : String
+    ---
+    +Area(id : String)
+    +getId() : String
+    {abstract} +getSpaces() : Space[]
+    {abstract} +getDoorsGivingAccess() : Door[]
+    {abstract} +findAreaById(id : String) : Area
+    }
+
+    class Partition {
+    -children : Area[]
+    ---
+    +Partition(id : String)
+    +getSpaces() : Space[]
+    +getDoorsGivingAccess() : Door[]
+    +findAreaById(id : String) : Area
+    +add(area: Area)
+
+    }
+
+    class Space {
+    -doors : Door[]
+    ---
+    +Space(id : String)
+    +getSpaces() : Space[]
+    +getDoorsGivingAccess() : Door[]
+    +findAreaById(id : String) : Area
+    +addDoor(door: Door)
+    }
+
+    '---RELATIONS---
+    DirectoryAreas "1" o--> "1" Area: "rootArea"
+    Area "*" <--o "1" Partition : children
+    Space "1" <-- Door : "toSpace"
+    Space "1" <-- Door : "fromSpace"
+    Door "*" <-- Space : "doors"
+
+    Area <|-- Partition
+    Area <|-- Space
+    '------------
+}
+
+package DirectoryUsers{
+    class DirectoryUserGroups{
+    {static}-userGroups : UserGroup[]
+    ---
+    +DirectoryUserGroups()
+    {static}+findGroupByName(name : String) : UserGroup
+    {static}+makeUserGroups()
+    }
+
+    class DirectoryUsers{
+    {static}-users : User[]
+    ---
+    {static}+makeUsers()
+    {static}+findUserByCredential(credential : String) : User
+    }
+
+    class User {
+    - name : String
+    - credential : String
+    - nameGroup : String
+    ---
+    +User(name: String, credential: String, nameGroup : String)
+    +getCredential() : String
+    + toString() : String
+    +canBeInSpace(sp : Space) : Boolean
+    +canSendRequests(time : LocalDateTime) : Boolean
+    +canDoAction(action : String) : Boolean
+    +getName() : String
+    }
+
+    class UserGroup{
+    -name : String
+    -users : User[]
+    -authorizedActions : String[]
+    -authorizedAreas : Area[]
+    -Schedule schedule : Schedule
+    ---
+    +UserGroup(name : String, actions : String[], areas : Area[], schedule : Schedule)
+    +getUsers() : User[]
+    +getAuthorizedAreas() : Area[]
+    +getSchedule : Schedule
+    +getAuthorizedActions() : String[]
+    +getName() : String
+    +addUser(user : User)
+    +removeUser(user : User)
+    }
+
+    class Schedule{
+    -startTime : LocalTime
+    -endTime : LocalTime
+    -allowedWeekdays : DayOfWeek[]
+    ---
+    +Schedule(startTime : LocalTime, endTime : LocalTime, allowedWeekdays : DayOfWeek[])
+    +isTimeAuthorized(time : LocalDateTime) : Boolean
+    }
+
+    '---RELATIONS---
+    User "1" *--> "*" Area : "areas"
+    UserGroup "*" *--> "*" User
+    DirectoryUsers "*" *-> "1" User
+    DirectoryUserGroups "*" *-> "1" UserGroup
+    Schedule <--* UserGroup
+    '------------
+}
+
+class Main{}
+
+class Webserver {
+- {static} PORT :int
+- {static} FORMATTER : DateTimeFormatter
+---
++ Webserver()
+}
+
+class SocketThread {
+- insocked : Socked
+- makeRequest(tokens : String[]) : Request
+- makeRequestReader(tokens : String[]) : RequestReader
+- makeRequestArea(tokens : String[]) : RequestArea
+- makeHeaderAnswer() : String
+- makeJsonAnswer(request : Request) : String
++ run()
+}
+
+Webserver +-right- SocketThread
+@enduml

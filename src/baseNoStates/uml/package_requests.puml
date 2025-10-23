@@ -1,5 +1,4 @@
 @startuml
-'https://plantuml.com/class-diagram
 skinparam classAttributeIconSize 0
 
 package requests {
@@ -11,9 +10,10 @@ package requests {
 
     class RequestRefresh implements Request {
     - jsonDoors : JSONObject[]
+    ---
     + answerToJson() : JSONObject
-    + process()
     + toString() : String
+    + process()
     }
 
     class RequestReader implements Request {
@@ -25,24 +25,31 @@ package requests {
     - authorized : boolean
     - reasons : String[]
     - doorStateName : String
-    + answerToJson() : JSONObject
-    + process()
-    - authorize(user : User, door : Door)
-    + toString() : String
+    - doorClosed : boolean
+    ---
+    + RequestReader(credential : String, action : String, now LocalDateTime, doorId : String)
     + setDoorStateName(name : String)
     + getAction() : String
     + isAuthorized() : boolean
+    + addReason(reason : String)
+    + toString() : String
+    + answerToJson() : JSONObject
+    + process()
+    - authorize(user : User, door : Door)
     }
 
     class RequestArea implements Request {
     - credential : String
     - action : String
-    - now : LocalDateTime
     - areaId : String
-    - requestsReader : RequestReader[]
-    + answerToJson() : JSONObject
-    + process()
+    - now : LocalDateTime
+    -requests : RequestReader[]
+    ---
+    + RequestArea(credential : String, action : String, now : LocalDateTime,areaId : String)
     + getAction() : String
+    + answerToJson() : JSONObject
+    + toString() : String
+    + process()
     }
 }
 
