@@ -70,11 +70,10 @@ public class DirectoryUserGroups {
     userGroups.add(new UserGroup("employees", employeeActions, employeeAreas, employeeSchedule));
 
     //Grupo de usuarios sin privilegios: Solo pueden abrir y cerrar puertas.
-    // Al no ser parte del personal del edificio, solo pueden abrir y cerrar puertas, pero no tienen permisos para acceder a ninguna zona
+    // Al no ser parte del personal del edificio, solo pueden abrir y cerrar puertas
     Schedule noPrivilegeSchedule = new Schedule(LocalTime.MIN, LocalTime.MAX,
         Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY, DayOfWeek.THURSDAY, DayOfWeek.FRIDAY));
     ArrayList<String> noPrivilegeActions = new ArrayList<>(Arrays.asList("open", "close"));
-    ArrayList<Area> noPrivilegeAreas = new ArrayList<>();
-    userGroups.add(new UserGroup("no_privilege", noPrivilegeActions, noPrivilegeAreas, noPrivilegeSchedule));
+    userGroups.add(new UserGroup("no_privilege", noPrivilegeActions, allAreas, noPrivilegeSchedule));
   }
 }
