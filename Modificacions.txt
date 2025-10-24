@@ -1,0 +1,6 @@
+Demanat:
+ -Revisar i modificar les conexions de les clases
+ -Aplicar el patró Observer en el UML
+
+Resolució:
+ Hem canviat les relacions del diagrama UML per adaptar-les a la seva implementación en el codi, també hem aplicat el patró Observer en Door i Clock
