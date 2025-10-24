@@ -246,6 +246,59 @@ package DirectoryUsers{
 
 class Main{}
 
+package requests {
+    interface Request {
+    + {abstract} answerToJson() : JSONObject
+    + {abstract} process()
+    + {abstract} toString() : String
+    }
+
+    class RequestRefresh implements Request {
+    - jsonDoors : JSONObject[]
+    ---
+    + answerToJson() : JSONObject
+    + toString() : String
+    + process()
+    }
+
+    class RequestReader implements Request {
+    - credential : String
+    - action : String
+    - now : LocalDateTime
+    - doorId : String
+    - userName : String
+    - authorized : boolean
+    - reasons : String[]
+    - doorStateName : String
+    - doorClosed : boolean
+    ---
+    + RequestReader(credential : String, action : String, now LocalDateTime, doorId : String)
+    + setDoorStateName(name : String)
+    + getAction() : String
+    + isAuthorized() : boolean
+    + addReason(reason : String)
+    + toString() : String
+    + answerToJson() : JSONObject
+    + process()
+    - authorize(user : User, door : Door)
+    }
+
+    class RequestArea implements Request {
+    - credential : String
+    - action : String
+    - areaId : String
+    - now : LocalDateTime
+    -requests : RequestReader[]
+    ---
+    + RequestArea(credential : String, action : String, now : LocalDateTime,areaId : String)
+    + getAction() : String
+    + answerToJson() : JSONObject
+    + toString() : String
+    + process()
+    }
+}
+
+
 class Webserver {
 - {static} PORT :int
 - {static} FORMATTER : DateTimeFormatter
