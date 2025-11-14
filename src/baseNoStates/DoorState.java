@@ -29,5 +29,5 @@ public abstract class DoorState {
    * Maneja un 'tick' del reloj (Patrón Observer)
    * Por defecto no hace nada, pero es sobreescrito por estados que necesiten reaccionar al paso del tiempo (UnlockedShortly)
    */
-  public void tick(){};
+  public void tick(){}
 }
