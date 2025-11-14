@@ -81,26 +81,26 @@ public final class DirectoryAreas {
     return rootArea.findAreaById(id);
   }
 
-  public Door findDoorById(String id) {
+  /*public Door findDoorById(String id) {
     for (Door door : allDoors) {
       if (door.getId().equals(id)) {
         return door;
       }
     }
     return null;
-  }
+  } //No sabemos si será necesario en un futuro */
 
-  public Area getRootArea() {return rootArea;}
+  //public Area getRootArea() {return rootArea;} -> No sabemos si será necesario en un futuro
 
-  public ArrayList<Door> getAllDoors() {
+  /*public ArrayList<Door> getAllDoors() {
     return allDoors;
-  }
+  } //No sabemos si será necesario en un futuro */
 
-  public ArrayList<Door> getDoorsGivingAccess(Area area) {
+  /*public ArrayList<Door> getDoorsGivingAccess(Area area) {
     return area.getDoorsGivingAccess();
-  }
+  } //No sabemos si será necesario en un futuro */
 
-  public ArrayList<Space> getSpaces(Area area) {
+  /*public ArrayList<Space> getSpaces(Area area) {
     return area.getSpaces();
-  }
+  } //No sabemos si será necesario en un futuro */
 }

@@ -18,22 +18,22 @@ public class UserGroup {
   }
 
   // Getters
-  public ArrayList<User> getUsers() {return users;}
+  //public ArrayList<User> getUsers() {return users;} -> No sabemos si se usará en el futuro
   public ArrayList<Area> getAuthorizedAreas() {return authorizedAreas;  }
   public Schedule getSchedule() {return schedule;  }
   public ArrayList<String> getAuthorizedActions() {return authorizedActions;  }
   public String getName() {return name;  }
 
-  public void addUser(User user) {
+  /*public void addUser(User user) {
     if (!users.contains(user)) {
       users.add(user);
     }
     else{
       System.out.println("User "+ user.getName() + " is already in this group");
     }
-  }
+  } //No sabemos si será necesario en un futuro */
 
-  public void removeUser(User user) {
+  /*public void removeUser(User user) {
     if (users.contains(user)) {
       users.remove(user);
     }
@@ -41,5 +41,5 @@ public class UserGroup {
       System.out.println("Error in REMOVE USER");
       System.out.println("User "+ user.getName() + " isn't in this group");
     }
-  }
+  } //No sabemos si será necesario en el futuro */
 }

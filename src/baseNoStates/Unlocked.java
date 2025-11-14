@@ -62,7 +62,4 @@ public class Unlocked extends DoorState {
     door.setState(new UnlockedShortly(door));
     System.out.println("The door " + door.getId() + " is now unlocked shortly.");
   }
-
-  @Override
-  public void propped() {}
 }

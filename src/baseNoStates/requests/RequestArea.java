@@ -28,9 +28,9 @@ public class RequestArea implements Request {
     this.now = now;
   }
 
-  public String getAction() {
+  /* public String getAction() {
     return action;
-  }
+  } //No sabemos si será necesario en un futuro */
 
   @Override
   public JSONObject answerToJson() {

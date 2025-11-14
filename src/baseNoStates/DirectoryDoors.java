@@ -17,15 +17,15 @@ public final class DirectoryDoors {
     DirectoryAreas directoryAreas = DirectoryAreas.getInstance();
 
     // Obtener las instancias de los espacios necesarios
-    Space exterior = (Space) directoryAreas.findAreaById("exterior");
-    Space parking = (Space) directoryAreas.findAreaById("parking");
-    Space stairs = (Space) directoryAreas.findAreaById("stairs");
-    Space hall = (Space) directoryAreas.findAreaById("hall");
-    Space room1 = (Space) directoryAreas.findAreaById("room 1");
-    Space room2 = (Space) directoryAreas.findAreaById("room 2");
-    Space corridor = (Space) directoryAreas.findAreaById("corridor");
-    Space room3 = (Space) directoryAreas.findAreaById("room 3");
-    Space it = (Space) directoryAreas.findAreaById("IT");
+    Space exterior = (Space) DirectoryAreas.findAreaById("exterior");
+    Space parking = (Space) DirectoryAreas.findAreaById("parking");
+    Space stairs = (Space) DirectoryAreas.findAreaById("stairs");
+    Space hall = (Space) DirectoryAreas.findAreaById("hall");
+    Space room1 = (Space) DirectoryAreas.findAreaById("room 1");
+    Space room2 = (Space) DirectoryAreas.findAreaById("room 2");
+    Space corridor = (Space) DirectoryAreas.findAreaById("corridor");
+    Space room3 = (Space) DirectoryAreas.findAreaById("room 3");
+    Space it = (Space) DirectoryAreas.findAreaById("IT");
 
     // Crear cada puerta especificando su ID y los dos espacios que conecta
     Door d1 = new Door("D1", exterior, parking);

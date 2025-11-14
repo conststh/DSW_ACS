@@ -8,9 +8,6 @@ import java.util.Arrays;
 public class DirectoryUserGroups {
   private static final ArrayList<UserGroup> userGroups = new ArrayList<>();
 
-  public DirectoryUserGroups() {
-    // this.userGroups = userGroups;
-  }
 
   public static UserGroup findGroupByName(String name) {
     for (UserGroup group : userGroups) {

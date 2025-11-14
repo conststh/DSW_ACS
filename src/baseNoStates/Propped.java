@@ -43,9 +43,4 @@ public class Propped extends DoorState {
   public void unlockShortly() {
     System.out.println("Can't unlock the door " + door.getId() + " shortly; it's already propped.");
   }
-
-  @Override
-  public void propped() {
-    System.out.println("The door " + door.getId() + " is already propped.");
-  }
 }

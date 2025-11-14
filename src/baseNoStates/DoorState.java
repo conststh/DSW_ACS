@@ -5,7 +5,7 @@ package baseNoStates;
  * Define la interfaz que todos los estados deben implementar para manejar las acciones que puede recibir una puerta
  */
 public abstract class DoorState {
-  protected Door door;
+  protected final Door door;
 
   protected DoorState(Door door){
     this.door = door;
@@ -23,7 +23,6 @@ public abstract class DoorState {
 
   public abstract void unlockShortly();
 
-  public abstract void propped();
 
   /**
    * Maneja un 'tick' del reloj (Patrón Observer)

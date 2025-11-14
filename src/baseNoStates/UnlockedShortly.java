@@ -79,6 +79,7 @@ public class UnlockedShortly extends DoorState {
         System.out.println("The door " + door.getId() + " is now locked (after short unlock).");
       } else {
         // Si la puerta está ABIERTA cuando expira el tiempo, entra en estado 'Propped'
+
         door.setState(new Propped(door));
         System.out.println("The door " + door.getId() + " is now propped (after short unlock timed out while open).");
       }

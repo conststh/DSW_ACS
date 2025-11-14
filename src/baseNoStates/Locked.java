@@ -38,7 +38,4 @@ public class Locked extends DoorState{
   public void unlockShortly(){
     door.setState(new UnlockedShortly(door));
   }
-
-  @Override
-  public void propped() {}
 }
