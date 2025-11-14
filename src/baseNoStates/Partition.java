@@ -1,6 +1,5 @@
 package baseNoStates;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Representa el componente 'Composite' en el patrón Composite

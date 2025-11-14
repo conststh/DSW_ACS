@@ -5,7 +5,6 @@ import org.json.JSONObject;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.time.LocalDateTime;
 
 /**
  * Representa la clase 'Contexto' en el patrón de diseño State
