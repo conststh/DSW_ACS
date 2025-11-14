@@ -102,12 +102,15 @@ public class RequestReader implements Request {
     // Quién y dónde
       if (user.canBeInSpace(door.getFromSpace()) && user.canBeInSpace(door.getToSpace()) && user.canDoAction(getAction())) {
         this.authorized = true;
-        addReason("User " + this.userName + " has no permissions for door " + door.getId());
       }
     // Cuándo
       if (!user.canSendRequests(now)) { //!door.isTimeAllowed
         this.authorized = false;
         addReason("Access to door " + door.getId() + " is not allowed at this time");
+      }
+      else {
+        this.authorized = false;
+        addReason("User " + this.userName + " has no permissions for door " + door.getId());
       }
     }
   }
