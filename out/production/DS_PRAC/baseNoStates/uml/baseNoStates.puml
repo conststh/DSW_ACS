@@ -1,6 +1,14 @@
 @startuml
 skinparam classAttributeIconSize 0
 package DirectoryDoors{
+    interface java.util.Observer {
+        + update(o: Observable, arg: Object)
+    }
+    class java.util.Observable {
+        + addObserver(o: Observer)
+        + notifyObservers(arg: Object)
+    }
+
     class Door {
     - id : String
     - closed : boolean
@@ -115,7 +123,8 @@ package DirectoryDoors{
     DoorState <|-- Propped
     Door "*" <-- DirectoryDoors : "allDoors"
 
-    Clock <|. Door : "Observ"
+    java.util.Observer <|.. Door
+    java.util.Observable <|-- Clock
     '------------
 }
 
@@ -236,11 +245,11 @@ package DirectoryUsers{
     }
 
     '---RELATIONS---
-    User "1" *--> "*" Area : "areas"
-    UserGroup "*" *--> "*" User
-    DirectoryUsers "*" *-> "1" User
-    DirectoryUserGroups "*" *-> "1" UserGroup
-    Schedule <--* UserGroup
+    Area "*" <- "1" UserGroup : "authorizedAreas"
+    User "*" <-- "1" UserGroup : "users"
+    User "*" <-- DirectoryUsers : "users"
+    UserGroup "*" <-- DirectoryUserGroups : "userGroups"
+    Schedule <--* "1" UserGroup : "schedule"
     '------------
 }
 

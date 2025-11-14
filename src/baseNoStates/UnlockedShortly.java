@@ -61,9 +61,6 @@ public class UnlockedShortly extends DoorState {
     System.out.println("The door " + door.getId() + " is already temporarily unlocked.");
   }
 
-  @Override
-  public void propped() {}
-
   /**
    * Método llamado por la Puerta (Observer) cada vez que el Reloj (Observable) envía un 'tick'
    * Verifica si el tiempo de expiración ha pasado
