@@ -7,10 +7,9 @@ import java.util.TimerTask;
 // Implementado como Singleton y Observable
 public class Clock extends Observable {
   private static final Clock instance = new Clock();
-  private final Timer timer;
 
   private Clock() {
-    timer = new Timer();
+    Timer timer = new Timer();
     // Organiza una tarea para que corra cada segundo
     timer.scheduleAtFixedRate(new TimerTask() {
       @Override
