@@ -1,7 +1,6 @@
 package baseNoStates;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UserGroup {
   private final String name;

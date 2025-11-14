@@ -1,7 +1,5 @@
 package baseNoStates;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class User {
   private final String name;

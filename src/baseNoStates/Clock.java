@@ -3,7 +3,6 @@ package baseNoStates;
 import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.time.LocalDateTime;
 
 // Implementado como Singleton y Observable
 public class Clock extends Observable {

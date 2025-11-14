@@ -1,8 +1,6 @@
 package baseNoStates;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Implementa el patrón Singleton para asegurar una única instancia que gestiona la estructura del edificio (Particiones, Espacios)

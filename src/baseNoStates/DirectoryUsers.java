@@ -1,7 +1,6 @@
 package baseNoStates;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public final class DirectoryUsers {
   private static final ArrayList<User> users = new ArrayList<>();
