@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Una Partition es un Área que puede contener otras Áreas, que pueden ser otras Partitions o Spaces
  */
 public class Partition extends Area{
-  private ArrayList<Area> children = new ArrayList<>();
+  private ArrayList<Area> children;
 
   public Partition(String id) {
     super(id);
