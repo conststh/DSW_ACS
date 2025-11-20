@@ -7,79 +7,107 @@ import java.util.Observable;
 import java.util.Observer;
 
 /**
- * Representa la clase 'Contexto' en el patrón de diseño State
- * Una Puerta mantiene una referencia a su estado actual y delega las acciones a ese objeto de estado
- * También implementa Observer para reaccionar a los ticks del reloj
+ * Representa una Puerta en el sistema.
+ * Patrones de Diseño aplicados:
+ * 1. **Patrón State (Contexto):** La puerta delega todo el comportamiento dinámico (abrir, cerrar, bloquear...)
+ * a su objeto de estado actual (`state`).
+ * 2. **Patrón Observer (Observador):** La puerta escucha al `Clock` (Observable).
+ * Cada segundo (tick), actualiza su estado (necesario para estados temporales como UnlockedShortly).
  */
-public class Door implements Observer {
+public class Door implements Observer
+{
   private final String id;
   private boolean closed;
-  private DoorState state;
+  private DoorState state; // Referencia al estado actual (Patrón State)
   private final Space fromSpace;
   private final Space toSpace;
 
-  public Door(String id, Space from, Space to) {
+  public Door(String id, Space from, Space to)
+  {
     this.id = id;
-    this.closed = true;
-    this.state = new Unlocked(this);
+    this.closed = true; // Estado físico por defecto
+    this.state = new Unlocked(this); // Estado lógico por defecto
     this.fromSpace = from;
     this.toSpace = to;
-    // Cada puerta se suscribe al Reloj al ser creada (Patrón Observer)
+    // Registramos esta puerta como observadora del Reloj global para recibir los "ticks"
     Clock.getInstance().addObserver(this);
   }
 
   /**
-   * Método llamado por el Reloj (Observable) cuando hay un 'tick'
-   * Delega el manejo del tick al estado actual
+   * Método llamado por el Reloj (Observable) cada segundo.
+   * Delegamos esta señal de tiempo al estado actual, ya que solo algunos estados
+   * (como UnlockedShortly) se preocupan por el paso del tiempo.
    */
   @Override
-  public void update(Observable o, Object arg) {
+  public void update(Observable o, Object arg)
+  {
     state.tick();
   }
 
-  public String getId() {
+  public String getId()
+  {
     return id;
   }
 
-  public String getStateName() {
+  public String getStateName()
+  {
     return state.getStateName();
   }
 
-  public void setState(DoorState state) {
+  // Permite cambiar el estado en tiempo de ejecución (Transición del Patrón State)
+  public void setState(DoorState state)
+  {
     this.state = state;
   }
 
-  public boolean isClosed() {
+  public boolean isClosed()
+  {
     return closed;
   }
 
-  public Space getFromSpace() {
+  public Space getFromSpace()
+  {
     return fromSpace;
   }
 
-  public Space getToSpace() {
+  public Space getToSpace()
+  {
     return toSpace;
   }
 
-  public void setClosed(boolean closed) {
+  public void setClosed(boolean closed)
+  {
     this.closed = closed;
   }
 
-  // Procesa una solicitud de acción (RequestReader) para la puerta, solo si la solicitud está autorizada
-  public void processRequest(RequestReader request) {
-    if (request.isAuthorized()) {
+  /**
+   * Punto de entrada para procesar una petición de usuario en esta puerta específica.
+   * La petición debe estar autorizada antes de realizar ninguna acción.
+   */
+  public void processRequest(RequestReader request)
+  {
+    if (request.isAuthorized())
+    {
       String action = request.getAction();
       doAction(action);
-    } else {
-      System.out.println("not authorized");
     }
+    else
+    {
+      System.out.println("Puerta " + this.id + ": Petición no autorizada.");
+    }
+    // Actualizamos la petición con el nombre del estado final para que el cliente sepa el resultado
     request.setDoorStateName(getStateName());
   }
 
-  // Ejecuta una acción específica delegándola al estado actual
-   private void doAction(String action) {
-    // Este switch es el núcleo de la delegación del patrón State.
-    switch (action) {
+  /**
+   * Delega la acción solicitada al estado actual.
+   * Este es el núcleo del Patrón State: evita sentencias if/else o switch masivas
+   * basadas en el estado. El objeto 'state' decide qué hacer.
+   */
+  private void doAction(String action)
+  {
+    switch (action)
+    {
       case Actions.OPEN:
         state.open();
         break;
@@ -96,14 +124,14 @@ public class Door implements Observer {
         state.unlockShortly();
         break;
       default:
-        // Asegura que no se pase una acción desconocida
-        assert false : "Unknown action " + action;
+        assert false : "Acción desconocida " + action;
         System.exit(-1);
     }
   }
 
   @Override
-  public String toString() {
+  public String toString()
+  {
     return "Door{"
         + ", id='" + id + '\''
         + ", closed=" + closed
@@ -111,7 +139,8 @@ public class Door implements Observer {
         + "}";
   }
 
-  public JSONObject toJson() {
+  public JSONObject toJson()
+  {
     JSONObject json = new JSONObject();
     json.put("id", id);
     json.put("state", getStateName());

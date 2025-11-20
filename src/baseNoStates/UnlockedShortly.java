@@ -3,82 +3,102 @@ package baseNoStates;
 import java.time.LocalDateTime;
 
 /**
- * Representa el estado 'Desbloqueado Temporalmente' (UnlockedShortly)
- * Este estado se activa con 'unlockShortly' y dura un tiempo limitado (10 segundos)
- * Utiliza el método 'tick' para gestionar el temporizador
+ * Representa el estado 'Desbloqueado Temporalmente' (Unlocked Shortly).
+ * En este estado, la puerta se desbloquea temporalmente (10 segundos).
+ * Utiliza el mecanismo del Patrón Observer (vía `tick()`) para comprobar si el tiempo ha expirado.
  */
-public class UnlockedShortly extends DoorState {
+public class UnlockedShortly extends DoorState
+{
   private final LocalDateTime expiryTime;
+  private static final int DURATION_SECONDS = 10;
 
-  public UnlockedShortly(Door door) {
+  public UnlockedShortly(Door door)
+  {
     super(door);
-    // Define el tiempo de expiración (ahora + 10 segundos)
-    this.expiryTime = LocalDateTime.now().plusSeconds(10);
+    // Calculamos cuándo debe expirar este estado (Hora actual + 10 segundos)
+    this.expiryTime = LocalDateTime.now().plusSeconds(DURATION_SECONDS);
   }
 
   @Override
-  public String getStateName() {
+  public String getStateName()
+  {
     return "unlocked_shortly";
   }
 
   @Override
-  public void open() {
-    if (door.isClosed()) {
+  public void open()
+  {
+    if (door.isClosed())
+    {
       door.setClosed(false);
-      System.out.println("The door " + door.getId() + " is now open.");
-    } else {
-      System.out.println("Can't open the door " + door.getId() + ", is already open.");
+      System.out.println("Puerta " + door.getId() + ": Abierta (durante desbloqueo temporal).");
+    }
+    else
+    {
+      System.out.println("Puerta " + door.getId() + ": Ya está abierta.");
     }
   }
 
   @Override
-  public void close() {
-    if (door.isClosed()) {
-      System.out.println("Can't close the door " + door.getId() + ", is already closed.");
-    } else {
+  public void close()
+  {
+    if (door.isClosed())
+    {
+      System.out.println("Puerta " + door.getId() + ": Ya está cerrada.");
+    }
+    else
+    {
       door.setClosed(true);
-      System.out.println("The door " + door.getId() + " is now closed.");
+      System.out.println("Puerta " + door.getId() + ": Cerrada.");
     }
   }
 
   @Override
-  public void lock() {
-    if (door.isClosed()) {
+  public void lock()
+  {
+    if (door.isClosed())
+    {
       door.setState(new Locked(door));
-      System.out.println("The door " + door.getId() + " is now locked.");
-    } else {
-      System.out.println("Can't lock the door " + door.getId() + ", it's open.");
+      System.out.println("Puerta " + door.getId() + ": Bloqueada manualmente.");
+    }
+    else
+    {
+      System.out.println("Puerta " + door.getId() + ": No se puede bloquear, está abierta.");
     }
   }
 
   @Override
-  public void unlock() {
-    System.out.println("Can't unlock the door " + door.getId() + ", it's already unlocked (shortly).");
+  public void unlock()
+  {
+    System.out.println("Puerta " + door.getId() + ": Ya está desbloqueada (temporalmente).");
   }
 
   @Override
-  public void unlockShortly() {
-    System.out.println("The door " + door.getId() + " is already temporarily unlocked.");
+  public void unlockShortly()
+  {
+    System.out.println("Puerta " + door.getId() + ": Ya está en modo de desbloqueo temporal.");
   }
 
   /**
-   * Método llamado por la Puerta (Observer) cada vez que el Reloj (Observable) envía un 'tick'
-   * Verifica si el tiempo de expiración ha pasado
+   * Llamado cada segundo por la Puerta. Comprueba si el temporizador de 10 segundos ha expirado.
    */
   @Override
-  public void tick() {
-    // Comprueba si la hora actual es posterior a la hora de expiración
-    if (LocalDateTime.now().isAfter(expiryTime)) {
-      // El temporizador ha terminado
-      if (door.isClosed()) {
-        // Si la puerta está CERRADA cuando expira el tiempo, se bloquea
+  public void tick()
+  {
+    if (LocalDateTime.now().isAfter(expiryTime))
+    {
+      // El tiempo ha expirado. Comprobamos el estado físico de la puerta.
+      if (door.isClosed())
+      {
+        // Si está cerrada, se bloquea automáticamente (comportamiento seguro)
         door.setState(new Locked(door));
-        System.out.println("The door " + door.getId() + " is now locked (after short unlock).");
-      } else {
-        // Si la puerta está ABIERTA cuando expira el tiempo, entra en estado 'Propped'
-
+        System.out.println("Puerta " + door.getId() + ": Tiempo expirado. Bloqueada automáticamente.");
+      }
+      else
+      {
+        // Si está abierta, pasa a Propped (estado de alarma/aviso)
         door.setState(new Propped(door));
-        System.out.println("The door " + door.getId() + " is now propped (after short unlock timed out while open).");
+        System.out.println("Puerta " + door.getId() + ": Tiempo expirado mientras estaba ABIERTA. Estado -> Propped.");
       }
     }
   }

@@ -2,55 +2,72 @@ package baseNoStates;
 import java.util.ArrayList;
 
 /**
- * Representa el componente 'Composite' en el patrón Composite
- * Una Partition es un Área que puede contener otras Áreas, que pueden ser otras Partitions o Spaces
+ * Representa un Nodo Compuesto en el Patrón Composite.
+ * Una Partición puede contener múltiples sub-áreas (Espacios u otras Particiones).
  */
-public class Partition extends Area{
-  private ArrayList<Area> children;
+public class Partition extends Area
+{
+  private ArrayList<Area> children; // Lista de nodos hijos
 
-  public Partition(String id) {
+  public Partition(String id)
+  {
     super(id);
     children = new ArrayList<>();
   }
 
+  /**
+   * Recolecta recursivamente todos los espacios de todos los hijos.
+   */
   @Override
-  public ArrayList<Space> getSpaces() {
+  public ArrayList<Space> getSpaces()
+  {
     ArrayList<Space> allSpaces = new ArrayList<>();
-    // Pide a cada hijo sus espacios y los añade a la lista total.
-    for (Area child : children) {
+    for (Area child : children)
+    {
       allSpaces.addAll(child.getSpaces());
     }
     return allSpaces;
   }
 
+  /**
+   * Recolecta recursivamente todas las puertas de todos los hijos.
+   */
   @Override
-  public ArrayList<Door> getDoorsGivingAccess() {
+  public ArrayList<Door> getDoorsGivingAccess()
+  {
     ArrayList<Door> allDoors = new ArrayList<>();
-    // Pide a cada hijo sus puertas y las añade a la lista total
-    for (Area child : children) {
+    for (Area child : children)
+    {
       allDoors.addAll(child.getDoorsGivingAccess());
     }
     return allDoors;
   }
 
+  /**
+   * Búsqueda recursiva de un Área por ID.
+   * 1. Comprueba si esta partición es la buscada.
+   * 2. Si no, pide a cada hijo que la busque.
+   */
   @Override
-  public Area findAreaById(String id) {
-    // Primero, comprueba si esta partición es la que se busca
-    if (this.getId().equals(id)) {
+  public Area findAreaById(String id)
+  {
+    if (this.getId().equals(id))
+    {
       return this;
     }
-    // Si no, inicia la búsqueda recursiva en los hijos
-    for (Area child : children) {
-      Area actualArea = child.findAreaById(id);
-      // Si el hijo encuentra el área, la devuelve
-      if (actualArea != null) {
-        return actualArea;
+    for (Area child : children)
+    {
+      Area found = child.findAreaById(id);
+      if (found != null)
+      {
+        return found;
       }
     }
-    return null;
+    return null; // No encontrado en esta rama
   }
 
-  public void add(Area area) {
+  public void add(Area area)
+  {
     children.add(area);
   }
 }

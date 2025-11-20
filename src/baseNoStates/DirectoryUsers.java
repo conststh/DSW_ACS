@@ -2,10 +2,16 @@ package baseNoStates;
 
 import java.util.ArrayList;
 
-public final class DirectoryUsers {
+/**
+ * Registro para Usuarios.
+ * Crea usuarios específicos y los asigna a Grupos de Usuario.
+ */
+public final class DirectoryUsers
+{
   private static final ArrayList<User> users = new ArrayList<>();
 
-  public static void makeUsers() {
+  public static void makeUsers()
+  {
     DirectoryUserGroups.makeUserGroups();
     users.clear();
     // users without any privilege, just to keep temporally users instead of deleting them,
@@ -38,14 +44,16 @@ public final class DirectoryUsers {
     users.add(new User("Ana", "11343",   "admin"));
   }
 
-  public static User findUserByCredential(String credential) {
-    for (User user : users) {
-      if (user.getCredential().equals(credential)) {
+  public static User findUserByCredential(String credential)
+  {
+    for (User user : users)
+    {
+      if (user.getCredential().equals(credential))
+      {
         return user;
       }
     }
     System.out.println("user with credential " + credential + " not found");
     return null; // otherwise we get a Java error
   }
-
 }

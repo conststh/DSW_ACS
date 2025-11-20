@@ -6,31 +6,45 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class RequestRefresh implements Request {
+/**
+ * Maneja la petición de "refresh" enviada por el Simulador.
+ * Propósito: El frontend necesita conocer el estado actual de TODAS las puertas
+ * para pintarlas correctamente (mostrar rojo para Locked, verde para Unlocked, etc.).
+ * Esta petición recolecta esos datos.
+ */
+public class RequestRefresh implements Request
+{
+  // Lista para guardar la representación JSON de cada puerta
   private final ArrayList<JSONObject> jsonsDoors = new ArrayList<>();
 
   @Override
-  public JSONObject answerToJson() {
+  public JSONObject answerToJson()
+  {
     JSONObject json = new JSONObject();
+    // Envolver la lista de objetos puerta en un array padre "doors"
     json.put("doors", new JSONArray(jsonsDoors));
-    // jsonDoors ha sido establecido anteriormente por process()
     return json;
   }
 
   @Override
-  public String toString() {
+  public String toString()
+  {
     return "RequestRefresh{"
-        + jsonsDoors
+        + "doorsCount=" + jsonsDoors.size()
         + "}";
   }
 
+  /**
+   * El procesamiento implica iterar sobre el directorio global de puertas
+   * y pedir a cada puerta que serialice su estado actual a JSON.
+   */
+  public void process()
+  {
+    // limpiar datos previos si los hubiera (aunque se crea una nueva instancia por petición)
+    jsonsDoors.clear();
 
-  //Esto también se usa para pintar el simulador cuando la página está cargada y para mostrar
-  // puertas y lectores después de pasar de locked a propped y viceversa, pulsando el botón de "Refresh Request" del simulador.
-  //Además, para probar rápidamente si la solicitud de partición enviada por la app cliente en Flutter funciona,
-  // recoge el estado de todas las puertas para que el simulador pueda repintar los lectores
-  public void process() {
-    for (Door door : DirectoryDoors.getAllDoors()) {
+    for (Door door : DirectoryDoors.getAllDoors())
+    {
       jsonsDoors.add(door.toJson());
     }
   }

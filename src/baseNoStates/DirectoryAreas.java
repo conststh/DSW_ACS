@@ -3,58 +3,54 @@ package baseNoStates;
 import java.util.ArrayList;
 
 /**
- * Implementa el patrón Singleton para asegurar una única instancia que gestiona la estructura del edificio (Particiones, Espacios)
- * Construye la jerarquía de áreas y proporciona acceso global a ellas
+ * Singleton que gestiona la jerarquía estructural del edificio (Particiones y Espacios).
+ * Crea y almacena el árbol de Áreas.
  */
-public final class DirectoryAreas {
-  // La única instancia de la clase (Patrón Singleton)
+public final class DirectoryAreas
+{
   private static final DirectoryAreas instance = new DirectoryAreas();
   private static Area rootArea;
 
-  private final ArrayList<Door> allDoors;
-
-  /**
-   * Constructor privado para implementar el patrón Singleton
-   * Inicializa la lista de puertas y llama a makeAreas() para construir la estructura del edificio
-   */
-  private DirectoryAreas() {
-    allDoors = new ArrayList<>();
+  private DirectoryAreas()
+  {
     makeAreas();
   }
 
-  public static DirectoryAreas getInstance() {
+  public static DirectoryAreas getInstance()
+  {
     return instance;
   }
 
   /**
-   * Construye la jerarquía completa de particiones y espacios del edificio
-   * Utiliza el patrón Composite, donde 'Partition' es un nodo compuesto y 'Space' es un nodo hoja
+   * Construye el árbol Composite del edificio.
+   * Estructura: Edificio -> Plantas -> Habitaciones/Pasillos -> Puertas (vinculadas en DirectoryDoors)
    */
-  private void makeAreas() {
-    // Particiones principales
+  private void makeAreas()
+  {
+    // Crear Particiones (Compuestos)
     Partition building = new Partition("building");
-    rootArea = building; // El edificio es la raíz de la jerarquía
+    rootArea = building;
 
     Partition basement = new Partition("basement");
     Partition groundFloor = new Partition("ground floor");
     Partition floor1 = new Partition("floor 1");
 
-    // Áreas especiales que son hijas directas del edificio
+    // Espacios Especiales
     Space exterior = new Space("exterior");
     Space stairs = new Space("stairs");
 
-    // Añadir las particiones y espacios principales al edificio
+    // Construir Jerarquía
     building.add(basement);
     building.add(groundFloor);
     building.add(floor1);
     building.add(exterior);
     building.add(stairs);
 
-    // Espacios dentro del sótano
+    // Sótano
     Space parking = new Space("parking");
     basement.add(parking);
 
-    // Espacios dentro de la planta baja
+    // Planta Baja
     Space hall = new Space("hall");
     Space room1 = new Space("room 1");
     Space room2 = new Space("room 2");
@@ -64,8 +60,7 @@ public final class DirectoryAreas {
     groundFloor.add(room2);
     groundFloor.add(restRoomGF);
 
-
-    // Espacios dentro de la primera planta
+    // Primera Planta
     Space room3 = new Space("room 3");
     Space corridor = new Space("corridor");
     Space it = new Space("IT");
@@ -76,31 +71,9 @@ public final class DirectoryAreas {
     floor1.add(restRoomF1);
   }
 
-  public static Area findAreaById(String id) {
-    // Delega la búsqueda al método recursivo de la raíz
+  public static Area findAreaById(String id)
+  {
+    // Iniciar búsqueda desde la raíz
     return rootArea.findAreaById(id);
   }
-
-  /*public Door findDoorById(String id) {
-    for (Door door : allDoors) {
-      if (door.getId().equals(id)) {
-        return door;
-      }
-    }
-    return null;
-  } //No sabemos si será necesario en un futuro */
-
-  //public Area getRootArea() {return rootArea;} -> No sabemos si será necesario en un futuro
-
-  /*public ArrayList<Door> getAllDoors() {
-    return allDoors;
-  } //No sabemos si será necesario en un futuro */
-
-  /*public ArrayList<Door> getDoorsGivingAccess(Area area) {
-    return area.getDoorsGivingAccess();
-  } //No sabemos si será necesario en un futuro */
-
-  /*public ArrayList<Space> getSpaces(Area area) {
-    return area.getSpaces();
-  } //No sabemos si será necesario en un futuro */
 }

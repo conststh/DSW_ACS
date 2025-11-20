@@ -1,65 +1,77 @@
 package baseNoStates;
 
 /**
- * Representa el estado 'Desbloqueado' (Unlocked) de una puerta
- * En este estado, la puerta puede ser abierta, cerrada y bloqueada
+ * Representa el estado 'Desbloqueado' (Unlocked) de una puerta.
+ * En este estado:
+ * - La puerta está desbloqueada y se puede abrir o cerrar libremente.
+ * - Se puede bloquear (transición al estado Locked).
  */
-public class Unlocked extends DoorState {
-
-  public Unlocked(Door door) {
+public class Unlocked extends DoorState
+{
+  public Unlocked(Door door)
+  {
     super(door);
   }
 
   @Override
-  public String getStateName() {
+  public String getStateName()
+  {
     return "unlocked";
   }
 
   @Override
-  public void open() {
+  public void open()
+  {
     if (door.isClosed())
     {
       door.setClosed(false);
-      System.out.println("The door " + door.getId() + " is now open.");
+      System.out.println("Puerta " + door.getId() + ": Abierta.");
     }
     else
     {
-      System.out.println("Can't open the door " + door.getId() + ", is already open.");
+      System.out.println("Puerta " + door.getId() + ": Ya está abierta.");
     }
   }
 
   @Override
-  public void close() {
+  public void close()
+  {
     if (door.isClosed())
     {
-      System.out.println("Can't close the door " + door.getId() + ", is already closed.");
+      System.out.println("Puerta " + door.getId() + ": Ya está cerrada.");
     }
     else
     {
       door.setClosed(true);
-      System.out.println("The door " + door.getId() + " is now closed.");
+      System.out.println("Puerta " + door.getId() + ": Cerrada.");
     }
   }
 
   @Override
-  public void lock() {
-    if (door.isClosed()) {
+  public void lock()
+  {
+    // Solo una puerta cerrada puede bloquearse
+    if (door.isClosed())
+    {
       door.setState(new Locked(door));
-      System.out.println("The door " + door.getId()  + " is now locked.");
+      System.out.println("Puerta " + door.getId()  + ": Bloqueada.");
     }
-    else{
-      System.out.println("Can't lock the door " + door.getId() + ", it's open.");
+    else
+    {
+      System.out.println("Puerta " + door.getId() + ": No se puede bloquear, está abierta. Ciérrala primero.");
     }
   }
 
   @Override
-  public void unlock() {
-    System.out.println("Can't unlock the door " + door.getId() + ", it's already unlocked.");
+  public void unlock()
+  {
+    System.out.println("Puerta " + door.getId() + ": Ya está desbloqueada.");
   }
 
   @Override
-  public void unlockShortly() {
+  public void unlockShortly()
+  {
     door.setState(new UnlockedShortly(door));
-    System.out.println("The door " + door.getId() + " is now unlocked shortly.");
+    System.out.println("Puerta " + door.getId() + ": Cambiado a modo desbloqueo temporal.");
   }
 }
