@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Partition extends Area
 {
-  private ArrayList<Area> children; // Lista de nodos hijos
+  private final ArrayList<Area> children; // Lista de nodos hijos
 
   public Partition(String id)
   {

@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Space extends Area
 {
-  private ArrayList<Door> doors;
+  private final ArrayList<Door> doors;
 
   public Space(String id)
   {

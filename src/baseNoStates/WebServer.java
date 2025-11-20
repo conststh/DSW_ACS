@@ -39,7 +39,7 @@ public class WebServer {
   }
 
 
-  private class SocketThread extends Thread {
+  private static class SocketThread extends Thread {
     // as an inner class, SocketThread sees WebServer attributes
     private final Socket insocked; // client connection via Socket class
 

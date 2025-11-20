@@ -1,6 +1,6 @@
 package baseNoStates;
 
-import java.util.ArrayList;
+ // import java.util.ArrayList; (Por ahora no lo utilizamos)
 
 /**
  * Singleton que gestiona la jerarquía estructural del edificio (Particiones y Espacios).

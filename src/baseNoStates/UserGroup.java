@@ -13,7 +13,6 @@ import java.util.ArrayList;
 public class UserGroup
 {
   private final String name;
-  private final ArrayList<User> users;
   private final ArrayList<String> authorizedActions;
   private final ArrayList<Area> authorizedAreas;
   private final Schedule schedule;
@@ -24,7 +23,7 @@ public class UserGroup
     this.authorizedActions = actions;
     this.authorizedAreas = areas;
     this.schedule = schedule;
-    this.users = new ArrayList<>();
+    //ArrayList<User> users = new ArrayList<>(); no se llega a utilizar
   }
 
   public ArrayList<Area> getAuthorizedAreas()
