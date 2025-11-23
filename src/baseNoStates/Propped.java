@@ -1,5 +1,8 @@
 package baseNoStates;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Representa el estado 'Mantenida Abierta' (Propped).
  * Este es un estado anormal de alarma que ocurre cuando una puerta estaba en UnlockedShortly,
@@ -8,10 +11,11 @@ package baseNoStates;
  */
 public class Propped extends DoorState
 {
-
+  private static final Logger logger = LoggerFactory.getLogger(Propped.class);
   public Propped(Door door)
   {
     super(door);
+    logger.warn("ALARM: Door {} has entered PROPPED state!", door.getId());
   }
 
   @Override

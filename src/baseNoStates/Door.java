@@ -5,6 +5,8 @@ import org.json.JSONObject;
 
 import java.util.Observable;
 import java.util.Observer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Representa una Puerta en el sistema.
@@ -16,6 +18,7 @@ import java.util.Observer;
  */
 public class Door implements Observer
 {
+  private static final Logger logger = LoggerFactory.getLogger(Door.class);
   private final String id;
   private boolean closed;
   private DoorState state; // Referencia al estado actual (Patrón State)
@@ -33,6 +36,36 @@ public class Door implements Observer
     Clock.getInstance().addObserver(this);
   }
 
+  /**
+   * Punto de entrada para procesar una petición de usuario en esta puerta específica.
+   * La petición debe estar autorizada antes de realizar ninguna acción.
+   */
+  public void processRequest(RequestReader request) {
+    if (request.isAuthorized()) {
+      String action = request.getAction();
+      doAction(action);
+      logger.info("Door {} executing action: {}", id, action);
+    } else {
+      logger.warn("Door {}: Unauthorized request for action {}", id, request.getAction());
+    }
+    request.setDoorStateName(getStateName());
+  }
+
+  private void doAction(String action) {
+    switch (action) {
+      case Actions.OPEN:
+        state.open();
+        break;
+      case Actions.UNLOCK:
+        // Ejemplo de log de advertencia solicitado
+        if (state.getStateName().equals("unlocked")) {
+          logger.warn("Door {} is already unlocked, but unlock requested again.", id);
+        }
+        state.unlock();
+        break;
+      // ... resto de casos ...
+    }
+  }
   /**
    * Método llamado por el Reloj (Observable) cada segundo.
    * Delegamos esta señal de tiempo al estado actual, ya que solo algunos estados
@@ -78,55 +111,6 @@ public class Door implements Observer
   public void setClosed(boolean closed)
   {
     this.closed = closed;
-  }
-
-  /**
-   * Punto de entrada para procesar una petición de usuario en esta puerta específica.
-   * La petición debe estar autorizada antes de realizar ninguna acción.
-   */
-  public void processRequest(RequestReader request)
-  {
-    if (request.isAuthorized())
-    {
-      String action = request.getAction();
-      doAction(action);
-    }
-    else
-    {
-      System.out.println("Puerta " + this.id + ": Petición no autorizada.");
-    }
-    // Actualizamos la petición con el nombre del estado final para que el cliente sepa el resultado
-    request.setDoorStateName(getStateName());
-  }
-
-  /**
-   * Delega la acción solicitada al estado actual.
-   * Este es el núcleo del Patrón State: evita sentencias if/else o switch masivas
-   * basadas en el estado. El objeto 'state' decide qué hacer.
-   */
-  private void doAction(String action)
-  {
-    switch (action)
-    {
-      case Actions.OPEN:
-        state.open();
-        break;
-      case Actions.CLOSE:
-        state.close();
-        break;
-      case Actions.LOCK:
-        state.lock();
-        break;
-      case Actions.UNLOCK:
-        state.unlock();
-        break;
-      case Actions.UNLOCK_SHORTLY:
-        state.unlockShortly();
-        break;
-      default:
-        assert false : "Acción desconocida " + action;
-        System.exit(-1);
-    }
   }
 
   @Override

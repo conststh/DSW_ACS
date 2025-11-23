@@ -1,5 +1,6 @@
 package baseNoStates;
 
+import baseNoStates.visitors.FindAreaVisitor;
  // import java.util.ArrayList; (Por ahora no lo utilizamos)
 
 /**
@@ -73,7 +74,11 @@ public final class DirectoryAreas
 
   public static Area findAreaById(String id)
   {
-    // Iniciar búsqueda desde la raíz
-    return rootArea.findAreaById(id);
+    // Usamos el Visitor para buscar en el árbol
+    FindAreaVisitor finder = new FindAreaVisitor(id);
+    if (rootArea != null) {
+      rootArea.accept(finder);
+    }
+    return finder.getResult();
   }
 }

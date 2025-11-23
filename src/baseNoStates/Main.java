@@ -1,4 +1,7 @@
 package baseNoStates;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Punto de entrada de la aplicación.
  * Inicializa los directorios de datos (Puertas, Usuarios) e inicia el WebServer.
@@ -9,8 +12,10 @@ package baseNoStates;
 
 public class Main
 {
+  private static final Logger logger = LoggerFactory.getLogger(Main.class);
   static void main(String[] args)
   {
+    logger.info("Starting Access Control System...");
     // Inicializar datos de simulación
     DirectoryDoors.makeDoors();
     DirectoryUsers.makeUsers();

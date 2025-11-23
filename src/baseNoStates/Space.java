@@ -1,7 +1,7 @@
 package baseNoStates;
-import java.util.ArrayList;
 import java.util.List;
-
+import baseNoStates.visitors.AreaVisitor;
+import java.util.ArrayList;
 /**
  * Representa un Nodo Hoja en el Patrón Composite.
  * Un Espacio es un área física que contiene Puertas pero NO otras Áreas.
@@ -16,36 +16,9 @@ public class Space extends Area
     doors = new ArrayList<>();
   }
 
-  /**
-   * Como un Espacio es una hoja, la lista de espacios que contiene es simplemente él mismo.
-   */
-  @Override
-  public ArrayList<Space> getSpaces()
-  {
-    return new ArrayList<>(List.of(this));
-  }
-
-  @Override
-  public ArrayList<Door> getDoorsGivingAccess()
+  public ArrayList<Door> getDoors()
   {
     return doors;
-  }
-
-  /**
-   * Implementación de hoja para la búsqueda.
-   * Si esta es el área buscada, se devuelve a sí misma; si no, devuelve null.
-   */
-  @Override
-  public Area findAreaById(String id)
-  {
-    if (this.getId().equals(id))
-    {
-      return this;
-    }
-    else
-    {
-      return null; // No encontrado y no hay hijos para explorar
-    }
   }
 
   public void addDoor(Door door)
@@ -54,5 +27,11 @@ public class Space extends Area
     {
       this.doors.add(door);
     }
+  }
+
+  @Override
+  public void accept(AreaVisitor visitor)
+  {
+    visitor.visit(this);
   }
 }

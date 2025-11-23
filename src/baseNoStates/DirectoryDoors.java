@@ -2,15 +2,31 @@ package baseNoStates;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Registro para todos los objetos Puerta (Door).
+ * Singleton para todos los objetos Puerta (Door).
  * Responsable de crear puertas y vincularlas a sus respectivos Espacios.
  */
 public final class DirectoryDoors
 {
+  private static final Logger logger = LoggerFactory.getLogger(DirectoryDoors.class);
+  private static DirectoryDoors instance; // Singleton instance
   private static ArrayList<Door> allDoors;
 
+  private DirectoryDoors() {
+    allDoors = new ArrayList<>();
+  }
+
+  public static synchronized DirectoryDoors getInstance() {
+    if (instance == null) {
+      instance = new DirectoryDoors();
+    }
+    return instance;
+  }
   /**
    * Crea instancias de Puerta y las conecta con Espacios (Origen/Destino).
    * Depende de que DirectoryAreas haya sido inicializado primero.
@@ -40,6 +56,7 @@ public final class DirectoryDoors
     Door d9 = new Door("D9", corridor, it);
 
     allDoors = new ArrayList<>(Arrays.asList(d1, d2, d3, d4, d5, d6, d7, d8, d9));
+    logger.debug("Creating doors and linking to spaces");
 
     // Establecer enlace bidireccional: Añadir puertas a los espacios que conectan
     exterior.addDoor(d1);     parking.addDoor(d1);
@@ -51,6 +68,7 @@ public final class DirectoryDoors
     corridor.addDoor(d7);     stairs.addDoor(d7);
     corridor.addDoor(d8);     room3.addDoor(d8);
     corridor.addDoor(d9);     it.addDoor(d9);
+    logger.info("Doors created successfully.");
   }
 
   public static Door findDoorById(String id)
@@ -62,7 +80,7 @@ public final class DirectoryDoors
         return door;
       }
     }
-    System.out.println("Puerta con id " + id + " no encontrada");
+    logger.warn("Door with id {} not found", id);
     return null;
   }
 
