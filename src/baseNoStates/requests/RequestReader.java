@@ -58,7 +58,6 @@ public class RequestReader implements Request
 
   @Override
   public JSONObject answerToJson()
-
   {
     JSONObject json = new JSONObject();
     json.put("authorized", authorized);
@@ -78,6 +77,7 @@ public class RequestReader implements Request
    */
   public void process()
   {
+    DirectoryUsers.getInstance();
     User user = DirectoryUsers.findUserByCredential(credential);
     Door door = DirectoryDoors.findDoorById(doorId);
 

@@ -1,14 +1,29 @@
 package baseNoStates;
 
 import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Registro para Usuarios.
  * Crea usuarios específicos y los asigna a Grupos de Usuario.
+ * Implementa el patrón Singleton para asegurar una única instancia del directorio.
  */
 public final class DirectoryUsers
 {
+  private static final Logger logger = LoggerFactory.getLogger(DirectoryUsers.class);
+  private static DirectoryUsers instance;
   private static final ArrayList<User> users = new ArrayList<>();
+
+  // Método de acceso global sincronizado
+  public static synchronized DirectoryUsers getInstance()
+  {
+    if (instance == null)
+    {
+      instance = new DirectoryUsers();
+    }
+    return instance;
+  }
 
   public static void makeUsers()
   {
@@ -42,6 +57,8 @@ public final class DirectoryUsers
     // all actions
     // all spaces
     users.add(new User("Ana", "11343",   "admin"));
+
+    logger.info("Usuarios cargados en el directorio. Total: {}", users.size());
   }
 
   public static User findUserByCredential(String credential)
@@ -53,7 +70,7 @@ public final class DirectoryUsers
         return user;
       }
     }
-    System.out.println("user with credential " + credential + " not found");
+    logger.warn("Usuario con credencial '{}' no encontrado", credential);
     return null; // otherwise we get a Java error
   }
 }

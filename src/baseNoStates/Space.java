@@ -1,5 +1,4 @@
 package baseNoStates;
-import java.util.List;
 import baseNoStates.visitors.AreaVisitor;
 import java.util.ArrayList;
 /**
@@ -29,6 +28,11 @@ public class Space extends Area
     }
   }
 
+  /**
+   * Implementación del Visitor.
+   * Llama al método `visit(Space space)` del visitante, permitiéndole ejecutar
+   * la lógica específica para un Espacio (ej: recolectar sus puertas).
+   */
   @Override
   public void accept(AreaVisitor visitor)
   {

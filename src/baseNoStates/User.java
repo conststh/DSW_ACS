@@ -1,5 +1,6 @@
 package baseNoStates;
 import java.time.LocalDateTime;
+import baseNoStates.visitors.GetSpacesVisitor;
 
 /**
  * Representa un usuario del sistema.
@@ -43,8 +44,11 @@ public class User
     // Itera a través de todas las áreas autorizadas (Particiones o Espacios) para este grupo
     for (Area authorizedArea : group.getAuthorizedAreas())
     {
+      // CORRECCIÓN: Usamos el Visitor para obtener los espacios del área autorizada
+      GetSpacesVisitor visitor = new GetSpacesVisitor();
+      authorizedArea.accept(visitor);
       // Chequeo (funciona si authorizedArea es el espacio mismo o una Partición padre)
-      if (authorizedArea.getSpaces().contains(space))
+      if (visitor.getSpaces().contains(space))
       {
         return true;
       }

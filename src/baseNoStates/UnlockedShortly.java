@@ -1,6 +1,8 @@
 package baseNoStates;
 
 import java.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Representa el estado 'Desbloqueado Temporalmente' (Unlocked Shortly).
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
  */
 public class UnlockedShortly extends DoorState
 {
+  private static final Logger logger = LoggerFactory.getLogger(UnlockedShortly.class);
   private final LocalDateTime expiryTime;
   private static final int DURATION_SECONDS = 10;
 
@@ -31,11 +34,11 @@ public class UnlockedShortly extends DoorState
     if (door.isClosed())
     {
       door.setClosed(false);
-      System.out.println("Puerta " + door.getId() + ": Abierta (durante desbloqueo temporal).");
+      logger.info("Puerta {}: Abierta (durante desbloqueo temporal).", door.getId());
     }
     else
     {
-      System.out.println("Puerta " + door.getId() + ": Ya está abierta.");
+      logger.info("Puerta {}: Ya está abierta.", door.getId());
     }
   }
 
@@ -44,12 +47,12 @@ public class UnlockedShortly extends DoorState
   {
     if (door.isClosed())
     {
-      System.out.println("Puerta " + door.getId() + ": Ya está cerrada.");
+      logger.info("Puerta {}: Ya está cerrada.", door.getId());
     }
     else
     {
       door.setClosed(true);
-      System.out.println("Puerta " + door.getId() + ": Cerrada.");
+      logger.info("Puerta {}: Cerrada.", door.getId());
     }
   }
 
@@ -59,24 +62,24 @@ public class UnlockedShortly extends DoorState
     if (door.isClosed())
     {
       door.setState(new Locked(door));
-      System.out.println("Puerta " + door.getId() + ": Bloqueada manualmente.");
+      logger.info("Puerta {}: Bloqueada manualmente.", door.getId());
     }
     else
     {
-      System.out.println("Puerta " + door.getId() + ": No se puede bloquear, está abierta.");
+      logger.warn("Puerta {}: No se puede bloquear, está abierta.", door.getId());
     }
   }
 
   @Override
   public void unlock()
   {
-    System.out.println("Puerta " + door.getId() + ": Ya está desbloqueada (temporalmente).");
+    logger.info("Puerta {}: Ya está desbloqueada (temporalmente).", door.getId());
   }
 
   @Override
   public void unlockShortly()
   {
-    System.out.println("Puerta " + door.getId() + ": Ya está en modo de desbloqueo temporal.");
+    logger.info("Puerta {}: Ya está en modo de desbloqueo temporal.", door.getId());
   }
 
   /**
@@ -92,13 +95,13 @@ public class UnlockedShortly extends DoorState
       {
         // Si está cerrada, se bloquea automáticamente (comportamiento seguro)
         door.setState(new Locked(door));
-        System.out.println("Puerta " + door.getId() + ": Tiempo expirado. Bloqueada automáticamente.");
+        logger.info("Puerta {}: Tiempo expirado. Bloqueada automáticamente.", door.getId());
       }
       else
       {
         // Si está abierta, pasa a Propped (estado de alarma/aviso)
         door.setState(new Propped(door));
-        System.out.println("Puerta " + door.getId() + ": Tiempo expirado mientras estaba ABIERTA. Estado -> Propped.");
+        logger.warn("Door {}: Tiempo expirado mientras estaba abierta. Entrando en modo PROPPED", door.getId());
       }
     }
   }

@@ -4,7 +4,7 @@ import baseNoStates.Actions;
 import baseNoStates.Area;
 import baseNoStates.DirectoryAreas;
 import baseNoStates.Door;
-import baseNoStates.requests.RequestReader;
+import baseNoStates.visitors.GetDoorsVisitor;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -65,8 +65,10 @@ public class RequestArea implements Request
 
     if (area != null)
     {
+      GetDoorsVisitor visitor = new GetDoorsVisitor();
+      area.accept(visitor);
       // Iterar sobre todas las puertas pertenecientes a esta área
-      for (Door door : area.getDoorsGivingAccess())
+      for (Door door : visitor.getDoors())
       {
         // Crear una petición específica para esta puerta individual
         RequestReader requestReader = new RequestReader(credential, action, now, door.getId());

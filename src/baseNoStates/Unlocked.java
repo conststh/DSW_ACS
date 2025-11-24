@@ -1,5 +1,8 @@
 package baseNoStates;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Representa el estado 'Desbloqueado' (Unlocked) de una puerta.
  * En este estado:
@@ -8,6 +11,8 @@ package baseNoStates;
  */
 public class Unlocked extends DoorState
 {
+  private static final Logger logger = LoggerFactory.getLogger(Unlocked.class);
+
   public Unlocked(Door door)
   {
     super(door);
@@ -25,11 +30,11 @@ public class Unlocked extends DoorState
     if (door.isClosed())
     {
       door.setClosed(false);
-      System.out.println("Puerta " + door.getId() + ": Abierta.");
+      logger.info("Puerta {}: Abierta.", door.getId());
     }
     else
     {
-      System.out.println("Puerta " + door.getId() + ": Ya está abierta.");
+      logger.info("Puerta {}: Ya está abierta.", door.getId());
     }
   }
 
@@ -38,12 +43,12 @@ public class Unlocked extends DoorState
   {
     if (door.isClosed())
     {
-      System.out.println("Puerta " + door.getId() + ": Ya está cerrada.");
+      logger.info("Puerta {}: Ya está cerrada.", door.getId());
     }
     else
     {
       door.setClosed(true);
-      System.out.println("Puerta " + door.getId() + ": Cerrada.");
+      logger.info("Puerta {}: Cerrada.", door.getId());
     }
   }
 
@@ -54,24 +59,24 @@ public class Unlocked extends DoorState
     if (door.isClosed())
     {
       door.setState(new Locked(door));
-      System.out.println("Puerta " + door.getId()  + ": Bloqueada.");
+      logger.info("Puerta {}: Bloqueada.", door.getId());
     }
     else
     {
-      System.out.println("Puerta " + door.getId() + ": No se puede bloquear, está abierta. Ciérrala primero.");
+      logger.warn("Puerta {}: No se puede bloquear, está abierta. Ciérrala primero.", door.getId());
     }
   }
 
   @Override
   public void unlock()
   {
-    System.out.println("Puerta " + door.getId() + ": Ya está desbloqueada.");
+    logger.info("Puerta {}: Ya está desbloqueada.", door.getId());
   }
 
   @Override
   public void unlockShortly()
   {
     door.setState(new UnlockedShortly(door));
-    System.out.println("Puerta " + door.getId() + ": Cambiado a modo desbloqueo temporal.");
+    logger.info("Puerta {}: Cambiando a modo de desbloqueo temporal.", door.getId());
   }
 }

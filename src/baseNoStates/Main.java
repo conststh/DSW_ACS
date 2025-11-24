@@ -15,9 +15,10 @@ public class Main
   private static final Logger logger = LoggerFactory.getLogger(Main.class);
   static void main(String[] args)
   {
-    logger.info("Starting Access Control System...");
+    logger.info("Iniciando Access Control System...");
     // Inicializar datos de simulación
     DirectoryDoors.makeDoors();
+    DirectoryUsers.getInstance();
     DirectoryUsers.makeUsers();
 
     // Iniciar el WebServer para escuchar peticiones

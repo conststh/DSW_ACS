@@ -1,5 +1,7 @@
 package baseNoStates;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /**
  * Representa el estado 'Bloqueado' (Locked) de una puerta.
  * En este estado:
@@ -9,6 +11,8 @@ package baseNoStates;
  */
 public class Locked extends DoorState
 {
+  private static final Logger logger = LoggerFactory.getLogger(Locked.class);
+
   public Locked(Door door)
   {
     super(door);
@@ -23,19 +27,19 @@ public class Locked extends DoorState
   @Override
   public void close()
   {
-    System.out.println("Puerta " + door.getId() + ": Ya está cerrada (y bloqueada).");
+    logger.warn("Puerta {}: Ya está cerrada (y bloqueada).", door.getId());
   }
 
   @Override
   public void open()
   {
-    System.out.println("Puerta " + door.getId() + ": No se puede abrir. La puerta está BLOQUEADA.");
+    logger.warn("Puerta {}: No se puede abrir. La puerta está BLOQUEADA.", door.getId());
   }
 
   @Override
   public void lock()
   {
-    System.out.println("Puerta " + door.getId() + ": Ya está bloqueada.");
+    logger.info("Puerta {}: Ya está bloqueada.", door.getId());
   }
 
   @Override
@@ -43,7 +47,7 @@ public class Locked extends DoorState
   {
     // Transición al estado Unlocked
     door.setState(new Unlocked(door));
-    System.out.println("Puerta " + door.getId() + ": Desbloqueada.");
+    logger.info("Puerta {}: Desbloqueada.", door.getId());
   }
 
   @Override
@@ -51,6 +55,6 @@ public class Locked extends DoorState
   {
     // Transición al estado UnlockedShortly
     door.setState(new UnlockedShortly(door));
-    System.out.println("Puerta " + door.getId() + ": Desbloqueada temporalmente.");
+    logger.info("Puerta {}: Desbloqueada temporalmente.", door.getId());
   }
 }
