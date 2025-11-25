@@ -20,7 +20,7 @@ public final class DirectoryUsers
   {
     if (instance == null)
     {
-      instance = new DirectoryUsers();
+      instance = new DirectoryUsers();  // No es un error ya que cumple con Singletons
     }
     return instance;
   }

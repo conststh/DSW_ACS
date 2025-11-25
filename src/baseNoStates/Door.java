@@ -56,14 +56,25 @@ public class Door implements Observer
       case Actions.OPEN:
         state.open();
         break;
+      case Actions.CLOSE:
+        state.close();
+        break;
+      case Actions.LOCK:
+        state.lock();
+        break;
       case Actions.UNLOCK:
         // Ejemplo de log de advertencia solicitado
-        if (state.getStateName().equals("unlocked")) {
-          logger.warn("Door {} is already unlocked, but unlock requested again.", id);
+        if (getStateName().equals("unlocked"))
+        {
+          logger.warn("Puerta {} Ya está desbloqueada.", id);
         }
         state.unlock();
         break;
-      // ... resto de casos ...
+      case Actions.UNLOCK_SHORTLY:
+        state.unlockShortly();
+        break;
+      default:
+        logger.warn("Puerta {}: Acción desconocida '{}'", id, action);
     }
   }
   /**

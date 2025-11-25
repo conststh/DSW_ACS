@@ -2,8 +2,6 @@ package baseNoStates;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +21,7 @@ public final class DirectoryDoors
 
   public static synchronized DirectoryDoors getInstance() {
     if (instance == null) {
-      instance = new DirectoryDoors();
+      instance = new DirectoryDoors(); // No es un error ya que cumple con Singleton
     }
     return instance;
   }

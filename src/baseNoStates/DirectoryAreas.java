@@ -1,7 +1,6 @@
 package baseNoStates;
 
 import baseNoStates.visitors.FindAreaVisitor;
- // import java.util.ArrayList; (Por ahora no lo utilizamos)
 
 /**
  * Singleton que gestiona la jerarquía estructural del edificio (Particiones y Espacios).
