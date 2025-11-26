@@ -1,5 +1,7 @@
 @startuml
 skinparam classAttributeIconSize 0
+
+' --- PAQUETE DOORS (Patrón State + Observer) ---
 package DirectoryDoors{
     interface java.util.Observer {
         + update(o: Observable, arg: Object)
@@ -69,6 +71,9 @@ package DirectoryDoors{
 
     class UnlockedShortly {
     + UnlockedShortly(door: Door)
+    - expiryTime : LocalDateTime
+    ---
+    + UnlockedShortly(door: Door)
     + getStateName() : String
     + open()
     + close()
@@ -91,11 +96,14 @@ package DirectoryDoors{
     }
 
     class DirectoryDoors {
-    - {static} allDoors : Door[]
+    - {static} instance : DirectoryDoors
+    - allDoors : ArrayList<Door>
     ---
+    - DirectoryDoors()
+    + {static} getInstance() : DirectoryDoors
     + {static} makeDoors()
     + {static} findDoorById(id : String) : Door
-    + {static} getAllDoors() : Door[]
+    + {static} getAllDoors() : ArrayList<Door>
     }
 
     class Actions{
@@ -114,9 +122,8 @@ package DirectoryDoors{
     {static}+getInstance() : Clock
     }
 
-    '---RELATIONS---
+    '---RELATIONS DOORS---
     Door "1" o- "1" DoorState : "state"
-
     DoorState <|-- Locked
     DoorState <|-- Unlocked
     DoorState <|-- UnlockedShortly
@@ -125,24 +132,52 @@ package DirectoryDoors{
 
     java.util.Observer <|.. Door
     java.util.Observable <|-- Clock
-    '------------
 }
 
+' --- PAQUETE VISITORS ---
+package visitors {
+    interface AreaVisitor {
+        + visit(space : Space)
+        + visit(partition : Partition)
+    }
+
+    class FindAreaVisitor implements AreaVisitor {
+        - idToFind : String
+        - foundArea : Area
+        ---
+        + FindAreaVisitor(id : String)
+        + visit(space : Space)
+        + visit(partition : Partition)
+        + getResult() : Area
+    }
+
+    class GetDoorsVisitor implements AreaVisitor {
+        - doors : ArrayList<Door>
+        ---
+        + visit(space : Space)
+        + visit(partition : Partition)
+        + getDoors() : ArrayList<Door>
+    }
+
+    class GetSpacesVisitor implements AreaVisitor {
+        - spaces : ArrayList<Space>
+        ---
+        + visit(space : Space)
+        + visit(partition : Partition)
+        + getSpaces() : ArrayList<Space>
+    }
+}
+
+' --- PAQUETE AREAS (Patrón Composite + Visitor Support) ---
 package DirectoryAreas{
     class DirectoryAreas{
     {static} -instance : DirectoryAreas
     {static} -rootArea : Area
-    -allDoors : Door[]
     ---
     - DirectoryAreas()
     {static} +getInstance() : DirectoryAreas
     -makeAreas()
     {static} +findAreaById(id : String) : Area
-    {static} +findDoorById(id : String) : Door
-    +getRootArea() : Area
-    +getAllDoors() : Door[]
-    +getDoorsGivingAccess(area: Area) : Door[]
-    +getSpaces(area: Area) : Space[]
     }
 
     abstract class Area {
@@ -150,33 +185,28 @@ package DirectoryAreas{
     ---
     +Area(id : String)
     +getId() : String
-    {abstract} +getSpaces() : Space[]
-    {abstract} +getDoorsGivingAccess() : Door[]
-    {abstract} +findAreaById(id : String) : Area
+    {abstract} +accept(visitor : AreaVisitor)
     }
 
     class Partition {
-    -children : Area[]
+    -children : ArrayList<Area>
     ---
     +Partition(id : String)
-    +getSpaces() : Space[]
-    +getDoorsGivingAccess() : Door[]
-    +findAreaById(id : String) : Area
     +add(area: Area)
-
+    +getChildren() : ArrayList<Area>
+    +accept(visitor : AreaVisitor)
     }
 
     class Space {
-    -doors : Door[]
+    -doors : ArrayList<Door>
     ---
     +Space(id : String)
-    +getSpaces() : Space[]
-    +getDoorsGivingAccess() : Door[]
-    +findAreaById(id : String) : Area
     +addDoor(door: Door)
+    +getDoors() : ArrayList<Door>
+    +accept(visitor : AreaVisitor)
     }
 
-    '---RELATIONS---
+    '---RELATIONS AREAS---
     DirectoryAreas "1" o--> "1" Area: "rootArea"
     Area "*" <--o "1" Partition : children
     Space "1" <-- Door : "toSpace"
@@ -185,12 +215,16 @@ package DirectoryAreas{
 
     Area <|-- Partition
     Area <|-- Space
-    '------------
+
+    ' Visitor connections
+    Area ..> AreaVisitor : accepts >
+    DirectoryAreas ..> FindAreaVisitor : uses >
 }
 
+' --- PAQUETE USERS ---
 package DirectoryUsers{
     class DirectoryUserGroups{
-    {static}-userGroups : UserGroup[]
+    {static}-userGroups : ArrayList<UserGroup>
     ---
     +DirectoryUserGroups()
     {static}+findGroupByName(name : String) : UserGroup
@@ -198,8 +232,10 @@ package DirectoryUsers{
     }
 
     class DirectoryUsers{
-    {static}-users : User[]
+    {static}-instance : DirectoryUsers
+    {static}-users : ArrayList<User>
     ---
+    {static}+getInstance() : DirectoryUsers
     {static}+makeUsers()
     {static}+findUserByCredential(credential : String) : User
     }
@@ -220,41 +256,41 @@ package DirectoryUsers{
 
     class UserGroup{
     -name : String
-    -users : User[]
-    -authorizedActions : String[]
-    -authorizedAreas : Area[]
-    -Schedule schedule : Schedule
+    -authorizedActions : ArrayList<String>
+    -authorizedAreas : ArrayList<Area>
+    -schedule : Schedule
     ---
-    +UserGroup(name : String, actions : String[], areas : Area[], schedule : Schedule)
-    +getUsers() : User[]
-    +getAuthorizedAreas() : Area[]
-    +getSchedule : Schedule
-    +getAuthorizedActions() : String[]
+    +UserGroup(name : String, actions : ArrayList<String>, areas : ArrayList<Area>, schedule : Schedule)
+    +getAuthorizedAreas() : ArrayList<Area>
+    +getSchedule() : Schedule
+    +getAuthorizedActions() : ArrayList<String>
     +getName() : String
-    +addUser(user : User)
-    +removeUser(user : User)
     }
 
     class Schedule{
     -startTime : LocalTime
     -endTime : LocalTime
-    -allowedWeekdays : DayOfWeek[]
+    -allowedWeekdays : List<DayOfWeek>
     ---
-    +Schedule(startTime : LocalTime, endTime : LocalTime, allowedWeekdays : DayOfWeek[])
+    +Schedule(startTime : LocalTime, endTime : LocalTime, allowedWeekdays : List<DayOfWeek>)
     +isTimeAuthorized(time : LocalDateTime) : Boolean
     }
 
-    '---RELATIONS---
+    '---RELATIONS USERS---
     Area "*" <- "1" UserGroup : "authorizedAreas"
-    User "*" <-- "1" UserGroup : "users"
     User "*" <-- DirectoryUsers : "users"
     UserGroup "*" <-- DirectoryUserGroups : "userGroups"
     Schedule <--* "1" UserGroup : "schedule"
-    '------------
+
+    ' Visitor connections
+    User ..> GetSpacesVisitor : uses >
 }
 
-class Main{}
+class Main{
+    + {static} main(args : String[])
+}
 
+' --- PAQUETE REQUESTS ---
 package requests {
     interface Request {
     + {abstract} answerToJson() : JSONObject
@@ -263,7 +299,7 @@ package requests {
     }
 
     class RequestRefresh implements Request {
-    - jsonDoors : JSONObject[]
+    - jsonsDoors : ArrayList<JSONObject>
     ---
     + answerToJson() : JSONObject
     + toString() : String
@@ -277,7 +313,7 @@ package requests {
     - doorId : String
     - userName : String
     - authorized : boolean
-    - reasons : String[]
+    - reasons : ArrayList<String>
     - doorStateName : String
     - doorClosed : boolean
     ---
@@ -297,7 +333,7 @@ package requests {
     - action : String
     - areaId : String
     - now : LocalDateTime
-    -requests : RequestReader[]
+    - requests : ArrayList<RequestReader>
     ---
     + RequestArea(credential : String, action : String, now : LocalDateTime,areaId : String)
     + getAction() : String
@@ -305,8 +341,10 @@ package requests {
     + toString() : String
     + process()
     }
-}
 
+    ' Visitor connection
+    RequestArea ..> GetDoorsVisitor : uses >
+}
 
 class Webserver {
 - {static} PORT :int
@@ -316,7 +354,7 @@ class Webserver {
 }
 
 class SocketThread {
-- insocked : Socked
+- insocked : Socket
 - makeRequest(tokens : String[]) : Request
 - makeRequestReader(tokens : String[]) : RequestReader
 - makeRequestArea(tokens : String[]) : RequestArea
