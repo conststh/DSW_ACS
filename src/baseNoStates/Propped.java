@@ -27,34 +27,39 @@ public class Propped extends DoorState
   @Override
   public void open()
   {
-    System.out.println("Puerta " + door.getId() + ": Ya está abierta (Propped).");
+    String info = "Puerta " + door.getId() + ": Ya está abierta (Propped).";
+    logger.warn(info);
   }
 
   @Override
   public void close()
   {
     door.setClosed(true);
-    System.out.println("Puerta " + door.getId() + ": Cierre forzado desde estado Propped.");
+    String info = "Puerta " + door.getId() + ": Cierre forzado desde estado Propped.";
+    logger.info(info);
     // Una vez cerrada, una puerta propped vuelve a Locked (medida de seguridad)
     door.setState(new Locked(door));
-    System.out.println("Puerta " + door.getId() + ": Ahora Bloqueada.");
+    info = "Puerta " + door.getId() + ": Ahora Bloqueada.";
+    logger.info(info);
   }
 
   @Override
-  public void lock()
-  {
-    System.out.println("Puerta " + door.getId() + ": No se puede bloquear directamente. Ciérrala primero.");
+  public void lock() {
+    String info = "Puerta " + door.getId() + ": No se puede bloquear directamente. Ciérrala primero.";
+    logger.warn(info);
   }
 
   @Override
   public void unlock()
   {
-    System.out.println("Puerta " + door.getId() + ": No se puede desbloquear. Está mantenida abierta (Propped).");
+    String info = "Puerta " + door.getId() + ": No se puede desbloquear. Está mantenida abierta (Propped).";
+    logger.warn(info);
   }
 
   @Override
   public void unlockShortly()
   {
-    System.out.println("Puerta " + door.getId() + ": No se puede desbloquear temporalmente. Está Propped.");
+    String info = "Puerta " + door.getId() + ": No se puede desbloquear temporalmente. Está Propped.";
+    logger.warn(info);
   }
 }
