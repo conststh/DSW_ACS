@@ -84,7 +84,7 @@ public final class DirectoryDoors
 
   public static ArrayList<Door> getAllDoors()
   {
-    System.out.println(allDoors);
+    logger.debug("Doors: {}", allDoors);
     return allDoors;
   }
 }
