@@ -5,3 +5,10 @@ Fita 1:
 
     Resolució:
         Hem canviat les relacions del diagrama UML per adaptar-les a la seva implementación en el codi, també hem aplicat el patró Observer en Door i Clock
+
+Fita 2:
+    Demanat:
+        -Afegir els logs en la part de visitors
+
+    Resolució:
+        Hem afegit els logs necessaris en les 3 classes.

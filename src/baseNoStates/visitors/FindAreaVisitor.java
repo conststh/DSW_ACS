@@ -3,6 +3,8 @@ package baseNoStates.visitors;
 import baseNoStates.Area;
 import baseNoStates.Partition;
 import baseNoStates.Space;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Visitante concreto para buscar un Área por su ID.
@@ -11,6 +13,7 @@ import baseNoStates.Space;
  */
 public class FindAreaVisitor implements AreaVisitor
 {
+  private static final Logger logger = LoggerFactory.getLogger(FindAreaVisitor.class);
   private final String idToFind;
   private Area foundArea = null;
 
@@ -25,6 +28,7 @@ public class FindAreaVisitor implements AreaVisitor
     // Comprobación directa en la hoja
     if (space.getId().equals(idToFind))
     {
+      logger.debug("OBJETIVO ENCONTRADO: Espacio '{}'", space.getId());
       foundArea = space;
     }
   }
@@ -35,9 +39,12 @@ public class FindAreaVisitor implements AreaVisitor
     // Comprobamos si la partición misma es lo que buscamos
     if (partition.getId().equals(idToFind))
     {
+      logger.debug("OBJETIVO ENCONTRADO: Partición '{}'", partition.getId());
       foundArea = partition;
       return;
     }
+    logger.debug("Explorando dentro de Partición: '{}' buscando '{}'", partition.getId(), idToFind);
+
     // Si no, delegamos la búsqueda a los hijos (recursión controlada por el visitante)
     for (Area child : partition.getChildren())
     {

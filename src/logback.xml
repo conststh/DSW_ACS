@@ -23,7 +23,14 @@
         </encoder>
     </appender>
 
-    <root level="WARN">
+    <!--    <logger name="baseNoStates.Locked" level="info" />-->
+    <!--    <logger name="baseNoStates.Unlocked" level="info" />-->
+    <!--    <logger name="baseNoStates.Propped" level="info" />-->
+    <!--    <logger name="baseNoStates.requests" level="info" />-->
+    <logger name="baseNoStates.visitors" level="debug" />
+    <!--    <logger name="baseNoStates.WebServer" level="info" />-->
+
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
