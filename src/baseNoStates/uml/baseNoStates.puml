@@ -217,8 +217,8 @@ package DirectoryAreas{
     Area <|-- Space
 
     ' Visitor connections
-    Area ..> AreaVisitor : accepts >
-    DirectoryAreas ..> FindAreaVisitor : uses >
+    Area ..> AreaVisitor : accepts
+    DirectoryAreas ..> FindAreaVisitor : uses
 }
 
 ' --- PAQUETE USERS ---
@@ -283,7 +283,7 @@ package DirectoryUsers{
     Schedule <--* "1" UserGroup : "schedule"
 
     ' Visitor connections
-    User ..> GetSpacesVisitor : uses >
+    User ..> GetSpacesVisitor : uses
 }
 
 class Main{
@@ -343,7 +343,7 @@ package requests {
     }
 
     ' Visitor connection
-    RequestArea ..> GetDoorsVisitor : uses >
+    RequestArea ..> GetDoorsVisitor : uses
 }
 
 class Webserver {
