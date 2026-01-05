@@ -1,0 +1,85 @@
+import 'package:flutter/material.dart';
+
+class AppLocalizations {
+  final Locale locale;
+  AppLocalizations(this.locale);
+
+  static final Map<String, Map<String, String>> _localizedValues = {
+    'es': {
+      'title': 'Control ACS',
+      'recent': 'Recientes',
+      'propped': 'Propped',
+      'basement': 'Sótano',
+      'ground_floor': 'Planta Baja',
+      'floor1': 'Planta 1',
+      'parking': 'Parking',
+      'hall': 'Recibidor',
+      'room 1': 'Sala 1',
+      'room 2': 'Sala 2',
+      'room 3': 'Sala 3',
+      'IT': 'IT',
+      'stairs': 'Escaleras',
+      'corridor': 'Pasillo',
+      'doors': 'Puertas',
+      'door_element': 'Puerta',
+      'no_doors': 'Sin puertas activas',
+      'state': 'Estado',
+      'exterior': 'Exterior',
+      'unlocked': 'Desbloqueada',
+      'locked': 'Bloqueada',
+      'unlocked_shortly': 'Desbloqueada temporalmente',
+    },
+    'ca': {
+      'title': 'Control ACS',
+      'recent': 'Recents',
+      'propped': 'Propped',
+      'basement': 'Soterrani',
+      'ground_floor': 'Planta Baixa',
+      'floor1': 'Planta 1',
+      'parking': 'Parking',
+      'hall': 'Rebedor',
+      'room 1': 'Sala 1',
+      'room 2': 'Sala 2',
+      'room 3': 'Sala 3',
+      'IT': 'IT',
+      'stairs': 'Escales',
+      'corridor': 'Passadís',
+      'doors': 'Portes',
+      'door_element': 'Porta',
+      'no_doors': 'Sense portes actives',
+      'state': 'Estat',
+      'exterior': 'Exterior',
+      'unlocked': 'Desbloquejada',
+      'locked': 'Bloquejada',
+      'unlocked_shortly': 'Desbloquejada temporalment',
+    },
+    'en': {
+      'title': 'ACS Control',
+      'recent': 'Recent',
+      'propped': 'Propped',
+      'basement': 'Basement',
+      'ground_floor': 'Ground Floor',
+      'floor1': 'Floor 1',
+      'parking': 'Parking',
+      'hall': 'Hall',
+      'room 1': 'Room 1',
+      'room 2': 'Room 2',
+      'room 3': 'Room 3',
+      'IT': 'IT',
+      'stairs': 'Stairs',
+      'corridor': 'Corridor',
+      'doors': 'Doors',
+      'door_element': 'Door',
+      'no_doors': 'No active doors',
+      'state': 'State',
+      'exterior': 'Exterior',
+      'unlocked': 'Unlocked',
+      'locked': 'Locked',
+      'unlocked_shortly': 'Unlocked shortly',
+    },
+  };
+
+  String translate(String key) {
+    return _localizedValues[locale.languageCode]?[key] ?? key;
+  }
+}
