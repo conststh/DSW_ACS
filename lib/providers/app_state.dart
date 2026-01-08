@@ -8,8 +8,10 @@ class AppState extends ChangeNotifier {
   Timer? _refreshTimer;
   
   List<Door> _doors = [];
-  final List<Door> _recentDoors = [];
+  List<Door> _recentDoors = [];
   Locale _currentLocale = const Locale('es');
+  
+  bool _recentsInitialized = false; // Para hardcodear 1 vez
 
   final Map<String, List<String>> hierarchy = {
     'basement': ['parking', 'stairs basement'],
@@ -40,7 +42,7 @@ class AppState extends ChangeNotifier {
     return partitionDoors.toList();
   }
 
-  // --- LÓGICA DE ESTADO COMPUESTO (candado de grupo) ---
+  // --- LÓGICA DE ESTADO COMPUESTO ---
   bool isGroupLocked(List<Door> groupDoors) {
     if (groupDoors.isEmpty) return false;
     return groupDoors.every((d) => d.state == 'locked');
@@ -51,7 +53,9 @@ class AppState extends ChangeNotifier {
   }
 
   // --- ACCIONES ---
-  void _startPolling() { //3segundos
+  void _startPolling() {
+    loadData();
+    // Refresh cada 3 segundos
     _refreshTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
       loadData();
     });
@@ -81,9 +85,49 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> loadData() async {
-    final doorsJson = await _apiService.fetchAllDoors();
-    _doors = doorsJson.map((json) => Door.fromJson(json)).toList();
-    notifyListeners();
+    try {
+      final doorsJson = await _apiService.fetchAllDoors();
+      final List<Door> newDoors = doorsJson.map((json) => Door.fromJson(json)).toList();
+      
+      _doors = newDoors;
+      // Inicialización de Recientes
+      if (!_recentsInitialized && _doors.isNotEmpty) {
+        _initializeHardcodedRecents();
+        _recentsInitialized = true;
+      }
+
+      // Sincronización de Recientes
+      if (_recentDoors.isNotEmpty) {
+        _recentDoors = _recentDoors.map((recent) {
+          // Buscamos la versión actualizada de esta puerta en la nueva lista
+          return _doors.firstWhere(
+            (d) => d.id == recent.id, 
+            orElse: () => recent // Si por alguna razón desapareció, mantenemos la vieja
+          );
+        }).toList();
+      }
+
+      notifyListeners();
+    } catch (e) {
+      debugPrint("Error loading data: $e");
+    }
+  }
+
+  void _initializeHardcodedRecents() {
+    final targetIds = ['D1', 'D2', 'D6', 'D4'];
+    
+    // Filtramos de la lista principal las puertas que coinciden
+    final initialRecents = _doors.where((d) => targetIds.contains(d.id)).toList();
+    
+    // Las añadimos a recientes
+    for (var id in targetIds) {
+      try {
+        var door = initialRecents.firstWhere((d) => d.id == id);
+        _recentDoors.add(door); 
+      } catch (e) {
+        // La puerta no existe en el backend
+      }
+    }
   }
 
   void addToRecents(Door door) {

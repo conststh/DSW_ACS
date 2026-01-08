@@ -21,21 +21,21 @@ class GlobalActionsBar extends StatelessWidget {
           ElevatedButton.icon(
             icon: const Icon(Icons.access_time),
             label: Text(trans.translate('recent')),
-            onPressed: () => _goToShortcuts(context, appState.recentDoors, 'recent'),
+            onPressed: () => _goToShortcuts(context, ShortcutType.recent, 'recent'),
           ),
           ElevatedButton.icon(
             icon: const Icon(Icons.warning_amber),
             label: Text(trans.translate('propped')),
             style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
-            onPressed: () => _goToShortcuts(context, appState.proppedDoors, 'propped'),
+            onPressed: () => _goToShortcuts(context, ShortcutType.propped, 'propped'),
           ),
         ],
       ),
     );
   }
 
-  void _goToShortcuts(BuildContext context, var doors, String title) {
+  void _goToShortcuts(BuildContext context, ShortcutType type, String title) {
     Navigator.push(context, MaterialPageRoute(
-        builder: (_) => ShortcutListScreen(doors: doors, titleKey: title)));
+        builder: (_) => ShortcutListScreen(type: type, titleKey: title)));
   }
 }
