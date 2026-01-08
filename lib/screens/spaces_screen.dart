@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/door.dart';
 import '../providers/app_state.dart';
 import '../l10n/app_localizations.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/door_row.dart';
-import 'shortcut_list_screen.dart';
+import '../widgets/global_actions_bar.dart';
 
 class SpacesScreen extends StatelessWidget {
   final String partitionId;
@@ -27,12 +28,32 @@ class SpacesScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final spaceId = spaces[index];
                 final doors = appState.getDoorsForSpace(spaceId);
+                
+                // Cálculo de estado compuesto (grupo de puertas)
+                final isLocked = appState.isGroupLocked(doors);
 
                 return Card(
                   margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: ExpansionTile(
-                    title: Text(trans.translate(spaceId), 
-                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(trans.translate(spaceId), 
+                          style: const TextStyle(fontWeight: FontWeight.bold)),
+                        
+                        // Candado de Área
+                        IconButton(
+                           icon: Icon(
+                             isLocked ? Icons.lock : Icons.lock_open,
+                             color: isLocked ? Colors.red : Colors.green,
+                             size: 20,
+                           ),
+                           onPressed: () {
+                             _handleGroupLockAction(context, appState, trans, doors, isLocked);
+                           },
+                        )
+                      ],
+                    ),
                     leading: const Icon(Icons.room),
                     children: doors.isEmpty
                         ? [Padding(padding: const EdgeInsets.all(16), child: Text(trans.translate('no_doors')))]
@@ -42,34 +63,39 @@ class SpacesScreen extends StatelessWidget {
               },
             ),
           ),
-          // Botons Inferiors (Extra requeriment)
-          Container(
-            color: Colors.grey[200],
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.access_time), // Rellotge
-                  label: Text(trans.translate('recent')),
-                  onPressed: () => _goToShortcuts(context, appState.recentDoors, 'recent'),
-                ),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.warning_amber), // Propped
-                  label: Text(trans.translate('propped')),
-                  style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
-                  onPressed: () => _goToShortcuts(context, appState.proppedDoors, 'propped'),
-                ),
-              ],
-            ),
-          )
+          const GlobalActionsBar(),
         ],
       ),
     );
   }
 
-  void _goToShortcuts(BuildContext context, var doors, String title) {
-    Navigator.push(context, MaterialPageRoute(
-      builder: (_) => ShortcutListScreen(doors: doors, titleKey: title)));
+  void _handleGroupLockAction(
+      BuildContext context, 
+      AppState appState, 
+      AppLocalizations trans, 
+      List<Door> doors, 
+      bool isCurrentlyLocked) {
+    
+    if (isCurrentlyLocked) {
+      appState.sendBatchAction(doors, 'unlock');
+    } else {
+      if (appState.hasOpenDoors(doors)) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(trans.translate('action_denied')),
+            content: Text(trans.translate('error_doors_open_lock')),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text("OK"),
+              )
+            ],
+          ),
+        );
+      } else {
+        appState.sendBatchAction(doors, 'lock');
+      }
+    }
   }
 }

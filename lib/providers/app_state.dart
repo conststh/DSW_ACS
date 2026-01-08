@@ -5,13 +5,12 @@ import 'dart:async';
 
 class AppState extends ChangeNotifier {
   final ApiService _apiService = ApiService();
-  Timer? _refreshTimer; // Timer per al refresc automàtic
+  Timer? _refreshTimer;
   
   List<Door> _doors = [];
   final List<Door> _recentDoors = [];
   Locale _currentLocale = const Locale('es');
 
-  // Mapa de Jerarquia
   final Map<String, List<String>> hierarchy = {
     'basement': ['parking', 'stairs'],
     'ground_floor': ['hall', 'room 1', 'room 2', 'stairs'],
@@ -19,7 +18,6 @@ class AppState extends ChangeNotifier {
   };
 
   AppState() {
-    // Quan s'inicia l'app, arrenquem el polling
     _startPolling();
   }
 
@@ -33,25 +31,48 @@ class AppState extends ChangeNotifier {
     return _doors.where((d) => d.from == spaceId || d.to == spaceId).toList();
   }
 
-  // --- ACCIONS ---
-  //Actualitzar cada segon
+  List<Door> getDoorsForPartition(String partitionId) {
+    List<String> spaces = hierarchy[partitionId] ?? [];
+    Set<Door> partitionDoors = {};
+    for (var space in spaces) {
+      partitionDoors.addAll(getDoorsForSpace(space));
+    }
+    return partitionDoors.toList();
+  }
+
+  // --- LÓGICA DE ESTADO COMPUESTO (candado de grupo) ---
+  bool isGroupLocked(List<Door> groupDoors) {
+    if (groupDoors.isEmpty) return false;
+    return groupDoors.every((d) => d.state == 'locked');
+  }
+
+  bool hasOpenDoors(List<Door> groupDoors) {
+    return groupDoors.any((d) => !d.closed);
+  }
+
+  // --- ACCIONES ---
   void _startPolling() { 
     _refreshTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       loadData();
     });
   }
 
-  //Aturar el timer quan l'app es tanca
   @override
   void dispose() {
     _refreshTimer?.cancel();
     super.dispose();
   }
 
-  // Enviar acció i refrescar immediatament
   Future<void> sendDoorAction(String doorId, String action) async {
     await _apiService.sendCommand(doorId, action);
-    loadData(); // Actualitzem la UI al moment sense esperar al timer
+    loadData();
+  }
+
+  Future<void> sendBatchAction(List<Door> targetDoors, String action) async {
+    for (var door in targetDoors) {
+       await _apiService.sendCommand(door.id, action);
+    }
+    loadData();
   }
 
   void changeLanguage(Locale locale) {
@@ -61,7 +82,6 @@ class AppState extends ChangeNotifier {
 
   Future<void> loadData() async {
     final doorsJson = await _apiService.fetchAllDoors();
-    // Només notifiquem si hi ha canvis
     _doors = doorsJson.map((json) => Door.fromJson(json)).toList();
     notifyListeners();
   }

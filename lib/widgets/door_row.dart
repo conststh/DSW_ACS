@@ -19,7 +19,6 @@ class DoorRow extends StatelessWidget {
     bool isPropped = door.state == 'propped';
     bool isLocked = door.state == 'locked';
 
-    // Format ID sense 'D'
     String simpleId = door.id.replaceAll('D', '');
     String doorLabel = trans.translate('door_element');
 
@@ -36,7 +35,6 @@ class DoorRow extends StatelessWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Porta Física
           IconButton(
             icon: Icon(
               isOpen ? Icons.door_front_door_outlined : Icons.door_front_door,
@@ -44,13 +42,33 @@ class DoorRow extends StatelessWidget {
               size: 28,
             ),
             onPressed: () {
-              // Si està tancada -> comanda 'open'. Si està oberta -> comanda 'close'
-              String action = door.closed ? 'open' : 'close';
-              appState.sendDoorAction(door.id, action);
+              if (door.closed) {
+                // Intentar abrir
+                if (isLocked) {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: const Text("Acción denegada"),
+                      content: Text("La puerta $simpleId está bloqueada. Debes desbloquearla primero."),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          child: const Text("OK"),
+                        )
+                      ],
+                    ),
+                  );
+                  return;
+                }
+                appState.sendDoorAction(door.id, 'open');
+              } else {
+                // Cerrar siempre permitido
+                appState.sendDoorAction(door.id, 'close');
+              }
             },
           ),
           
-          // Candau
+          // Candado
           IconButton(
             icon: Icon(
               isLocked ? Icons.lock : Icons.lock_open,
@@ -58,7 +76,6 @@ class DoorRow extends StatelessWidget {
               size: 28,
             ),
             onPressed: () {
-              // Si està locked -> 'unlock'. Si està unlocked/propped -> 'lock'
               String action = (door.state == 'locked') ? 'unlock' : 'lock';
               appState.sendDoorAction(door.id, action);
             },

@@ -28,6 +28,10 @@ class AppLocalizations {
       'unlocked': 'Desbloqueada',
       'locked': 'Bloqueada',
       'unlocked_shortly': 'Desbloqueada temporalmente',
+      'lock': 'Bloquear',
+      'unlock': 'Desbloquear',
+      'action_denied': 'Acción denegada',
+      'error_doors_open_lock': 'No se puede bloquear el grupo porque hay puertas abiertas. Ciérralas primero.',
     },
     'ca': {
       'title': 'Control ACS',
@@ -52,6 +56,10 @@ class AppLocalizations {
       'unlocked': 'Desbloquejada',
       'locked': 'Bloquejada',
       'unlocked_shortly': 'Desbloquejada temporalment',
+      'lock': 'Bloquejar',
+      'unlock': 'Desbloquejar',
+      'action_denied': 'Acció denegada',
+      'error_doors_open_lock': 'No es pot bloquejar el grup perquè hi ha portes obertes. Tanca-les primer.',
     },
     'en': {
       'title': 'ACS Control',
@@ -76,6 +84,10 @@ class AppLocalizations {
       'unlocked': 'Unlocked',
       'locked': 'Locked',
       'unlocked_shortly': 'Unlocked shortly',
+      'lock': 'Lock',
+      'unlock': 'Unlock',
+      'action_denied': 'Action denied',
+      'error_doors_open_lock': 'Cannot lock the group because there are open doors. Close them first.',
     },
   };
 
