@@ -12,9 +12,9 @@ class AppState extends ChangeNotifier {
   Locale _currentLocale = const Locale('es');
 
   final Map<String, List<String>> hierarchy = {
-    'basement': ['parking', 'stairs'],
-    'ground_floor': ['hall', 'room 1', 'room 2', 'stairs'],
-    'floor1': ['room 3', 'corridor', 'IT', 'stairs'],
+    'basement': ['parking', 'stairs basement'],
+    'ground_floor': ['hall', 'room 1', 'room 2', 'stairs ground'],
+    'floor1': ['room 3', 'corridor', 'IT', 'stairs floor 1'],
   };
 
   AppState() {

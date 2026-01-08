@@ -49,7 +49,7 @@ class DoorRow extends StatelessWidget {
                     context: context,
                     builder: (ctx) => AlertDialog(
                       title: Text(trans.translate('action_denied')),
-                      content: Text(trans.translate('error_door_open_lock')),
+                      content: Text(trans.translate('error_open_lock')),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(ctx),
@@ -77,6 +77,22 @@ class DoorRow extends StatelessWidget {
             ),
             onPressed: () {
               String action = (door.state == 'locked') ? 'unlock' : 'lock';
+              if (action == 'lock' && !door.closed) {
+                showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      title: Text(trans.translate('action_denied')),
+                      content: Text(trans.translate('error_lock_open')),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          child: const Text("OK"),
+                        )
+                      ],
+                    ),
+                  );
+                return;
+              }
               appState.sendDoorAction(door.id, action);
             },
           ),

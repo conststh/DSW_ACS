@@ -37,38 +37,42 @@ public final class DirectoryAreas
 
     // Espacios Especiales
     Space exterior = new Space("exterior");
-    Space stairs = new Space("stairs");
 
     // Construir Jerarquía
     building.add(basement);
     building.add(groundFloor);
     building.add(floor1);
     building.add(exterior);
-    building.add(stairs);
 
     // Sótano
     Space parking = new Space("parking");
+    Space stairsBasement = new Space("stairs basement");
     basement.add(parking);
+    basement.add(stairsBasement);
 
     // Planta Baja
     Space hall = new Space("hall");
     Space room1 = new Space("room 1");
     Space room2 = new Space("room 2");
     Space restRoomGF = new Space("rest room");
+    Space stairsGround = new Space("stairs ground");
     groundFloor.add(hall);
     groundFloor.add(room1);
     groundFloor.add(room2);
     groundFloor.add(restRoomGF);
+    groundFloor.add(stairsGround);
 
     // Primera Planta
     Space room3 = new Space("room 3");
     Space corridor = new Space("corridor");
     Space it = new Space("IT");
     Space restRoomF1 = new Space("rest room f1");
+    Space stairsFloor1 = new Space("stairs floor 1");
     floor1.add(room3);
     floor1.add(corridor);
     floor1.add(it);
     floor1.add(restRoomF1);
+    floor1.add(stairsFloor1);
   }
 
   public static Area findAreaById(String id)
