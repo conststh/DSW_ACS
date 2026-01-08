@@ -54,6 +54,13 @@ class DoorRow extends StatelessWidget {
                         TextButton(
                           onPressed: () => Navigator.pop(ctx),
                           child: const Text("OK"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            appState.sendDoorAction(door.id, 'unlock');
+                            Navigator.pop(ctx);
+                          },
+                          child: Text(trans.translate('unlock')),
                         )
                       ],
                     ),
@@ -87,6 +94,13 @@ class DoorRow extends StatelessWidget {
                         TextButton(
                           onPressed: () => Navigator.pop(ctx),
                           child: const Text("OK"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            appState.sendDoorAction(door.id, 'close');
+                            Navigator.pop(ctx);
+                          },
+                          child: Text(trans.translate('close')),
                         )
                       ],
                     ),

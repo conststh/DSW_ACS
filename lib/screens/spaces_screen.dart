@@ -89,6 +89,13 @@ class SpacesScreen extends StatelessWidget {
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
                 child: const Text("OK"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  appState.sendBatchAction(doors, 'close');
+                  Navigator.pop(ctx);
+                },
+                child: Text(trans.translate('close_all')),
               )
             ],
           ),

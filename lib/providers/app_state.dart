@@ -133,7 +133,7 @@ class AppState extends ChangeNotifier {
   void addToRecents(Door door) {
     _recentDoors.removeWhere((d) => d.id == door.id);
     _recentDoors.insert(0, door);
-    if (_recentDoors.length > 10) _recentDoors.removeLast();
+    if (_recentDoors.length > 5) _recentDoors.removeLast();
     notifyListeners();
   }
 }
