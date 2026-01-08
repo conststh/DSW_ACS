@@ -51,8 +51,8 @@ class AppState extends ChangeNotifier {
   }
 
   // --- ACCIONES ---
-  void _startPolling() { 
-    _refreshTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  void _startPolling() { //3segundos
+    _refreshTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
       loadData();
     });
   }

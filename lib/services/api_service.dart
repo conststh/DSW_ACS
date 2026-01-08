@@ -6,7 +6,6 @@ class ApiService {
   //Per a Windows Desktop
   static const String _baseUrl = 'http://localhost:8080';
 
-
   Future<List<dynamic>> fetchAllDoors() async {
     try {
       final response = await http.get(Uri.parse('$_baseUrl/refresh'));
@@ -27,8 +26,8 @@ class ApiService {
     final formatter = DateFormat("yyyy-MM-dd'T'HH:mm");
     final timeStr = formatter.format(now);
     
-    // Credencial "hardcoded" per a la demo
-    const credential = "1234"; 
+    // Credencial "admin" per a la demo
+    const credential = "11343"; 
 
     // Construcció de la URL segons WebServer.java
     final String url = '$_baseUrl/reader/credential/$credential/action/$action/time/$timeStr/target/$doorId';
