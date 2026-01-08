@@ -31,6 +31,7 @@ class AppLocalizations {
       'lock': 'Bloquear',
       'unlock': 'Desbloquear',
       'action_denied': 'Acción denegada',
+      'error_door_open_lock': 'No se puede abrir la puerta porque está bloqueada. Desbloquéala primero.',
       'error_doors_open_lock': 'No se puede bloquear el grupo porque hay puertas abiertas. Ciérralas primero.',
     },
     'ca': {
@@ -59,6 +60,7 @@ class AppLocalizations {
       'lock': 'Bloquejar',
       'unlock': 'Desbloquejar',
       'action_denied': 'Acció denegada',
+      'error_door_open_lock': 'No es pot obrir la porta perquè esta bloquejada. Desbloqueja-la primer.',
       'error_doors_open_lock': 'No es pot bloquejar el grup perquè hi ha portes obertes. Tanca-les primer.',
     },
     'en': {
@@ -87,6 +89,7 @@ class AppLocalizations {
       'lock': 'Lock',
       'unlock': 'Unlock',
       'action_denied': 'Action denied',
+      'error_door_open_lock': 'Cannot open the door because it is locked. Unlock it first.',
       'error_doors_open_lock': 'Cannot lock the group because there are open doors. Close them first.',
     },
   };

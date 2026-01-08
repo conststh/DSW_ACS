@@ -48,8 +48,8 @@ class DoorRow extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (ctx) => AlertDialog(
-                      title: const Text("Acción denegada"),
-                      content: Text("La puerta $simpleId está bloqueada. Debes desbloquearla primero."),
+                      title: Text(trans.translate('action_denied')),
+                      content: Text(trans.translate('error_door_open_lock')),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(ctx),
