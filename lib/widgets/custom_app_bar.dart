@@ -15,6 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     final trans = AppLocalizations(appState.currentLocale);
 
     return AppBar(
+      centerTitle: true,
       leadingWidth: 100, // Espai extra per a dos botons
       leading: Row(
         children: [
@@ -37,15 +38,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         // Requisit: Selector d'idioma (banderes)
         DropdownButton<Locale>(
           value: appState.currentLocale,
-          icon: const Icon(Icons.language),
           underline: Container(),
           onChanged: (Locale? newLocale) {
             if (newLocale != null) appState.changeLanguage(newLocale);
           },
-          items: const [
-             DropdownMenuItem(value: Locale('es'), child: Text('ESP')),
-             DropdownMenuItem(value: Locale('ca'), child: Text('CAT')),
-             DropdownMenuItem(value: Locale('en'), child: Text('ENG')),
+          items: [
+             DropdownMenuItem(
+               value: const Locale('es'),
+               child: Image.asset('lib/pngs_idiomas/español.png', width: 32, height: 32),
+             ),
+             DropdownMenuItem(
+               value: const Locale('ca'),
+               child: Image.asset('lib/pngs_idiomas/catalan.png', width: 32, height: 32),
+             ),
+             DropdownMenuItem(
+               value: const Locale('en'),
+               child: Image.asset('lib/pngs_idiomas/ingles.png', width: 32, height: 32),
+             ),
           ],
         ),
         const SizedBox(width: 10),
